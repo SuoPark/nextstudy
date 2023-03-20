@@ -13,7 +13,7 @@ export type SettingsContextValue = {
 };
 
 const initSettings: Settings = {
-  item: "item0",
+  item: "item1",
 };
 export const SettingsContext = createContext<SettingsContextValue>({
   saveSettings: () => null,
