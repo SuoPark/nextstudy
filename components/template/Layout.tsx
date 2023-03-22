@@ -14,8 +14,6 @@ const LayoutBody = styled("div")`
 `;
 const Layout = ({ children }: LayoutProps) => {
   const auth = useContext(AuthContext);
-  console.log(auth);
-  console.log(auth.user);
   if (auth.user) {
     return (
       <div>

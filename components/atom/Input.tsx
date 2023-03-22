@@ -1,4 +1,7 @@
+import { HTMLInputTypeAttribute } from "react";
+import { text } from "stream/consumers";
 import styled from "styled-components";
+import { InputType } from "zlib";
 
 const StyledInput = styled.input`
   border-radius: 5px;
@@ -18,8 +21,9 @@ interface Props {
   name?: string;
   value: string;
   setValue: (value: string) => void | null;
+  type?: HTMLInputTypeAttribute;
 }
-const Input = ({ id, name, value, setValue }: Props) => {
+const Input = ({ id, name, value, setValue, type = "text" }: Props) => {
   return (
     <StyledInput
       id={id}
@@ -27,6 +31,7 @@ const Input = ({ id, name, value, setValue }: Props) => {
       onChange={(e) => {
         setValue(e.target.value);
       }}
+      type={type}
       value={value}
     ></StyledInput>
   );

@@ -29,10 +29,22 @@ const LoginBox = () => {
     <StyledDiv>
       <Box title="LOGIN">
         <LoginForm onSubmit={login}>
-          <label>ID</label>
-          <Input id="email" name="email" value={email} setValue={setEmail} />
+          <label>Email</label>
+          <Input
+            id="email"
+            name="email"
+            value={email}
+            setValue={setEmail}
+            type="email"
+          />
           <label>PW</label>
-          <Input id="pw" name="pw" value={passWord} setValue={setPassWord} />
+          <Input
+            id="pw"
+            name="pw"
+            value={passWord}
+            setValue={setPassWord}
+            type="password"
+          />
           <Button content="Login" />
         </LoginForm>
       </Box>
