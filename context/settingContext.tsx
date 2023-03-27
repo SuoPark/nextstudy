@@ -5,7 +5,7 @@ interface SettingProps {
 }
 
 export interface Settings {
-  item: string;
+  itemIndex: number;
 }
 export type SettingsContextValue = {
   settings: Settings;
@@ -13,7 +13,7 @@ export type SettingsContextValue = {
 };
 
 const initSettings: Settings = {
-  item: "item1",
+  itemIndex: 0,
 };
 export const SettingsContext = createContext<SettingsContextValue>({
   saveSettings: () => null,

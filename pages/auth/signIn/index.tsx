@@ -1,6 +1,7 @@
-import LoginBox from "@/components/organism/LoginBox";
+import LoginBox from "@/components/login/LoginBox";
 import { Button } from "@mui/material";
 import Head from "next/head";
+import { ReactNode } from "react";
 const Login = () => {
   return (
     <>
@@ -11,5 +12,5 @@ const Login = () => {
     </>
   );
 };
-
+Login.getLayout = (page: ReactNode) => <>{page}</>;
 export default Login;

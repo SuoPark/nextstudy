@@ -43,7 +43,7 @@ const AuthProvider = ({ children }: Props) => {
 
   const handleLogin = ({ userEmail, userName }: userDataType) => {
     setUser({ userEmail, userName });
-    localStorage.setItem("test_login", "test");
+    localStorage.setItem("test_login", JSON.stringify({ userEmail, userName }));
     router.replace(`/`);
   };
 

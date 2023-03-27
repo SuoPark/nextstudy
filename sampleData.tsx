@@ -1,30 +1,33 @@
-import { ListItemType } from "./components/atom/ListItem";
+export interface ListItemType {
+  index: number;
+  content: string;
+  icon?: ImageData | "";
+}
 
-const sampleData: ListItemType[] = [
+export const sampleData: ListItemType[] = [
   {
-    index: 1,
+    index: 0,
     content: "SAMPLE1",
     icon: "",
   },
   {
-    index: 2,
+    index: 1,
     content: "SAMPLE2",
     icon: "",
   },
   {
-    index: 3,
+    index: 2,
     content: "SAMPLE3",
     icon: "",
   },
   {
-    index: 4,
+    index: 3,
     content: "SAMPLE4",
     icon: "",
   },
   {
-    index: 5,
+    index: 4,
     content: "SAMPLE5",
     icon: "",
   },
 ];
-export default sampleData;

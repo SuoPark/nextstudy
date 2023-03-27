@@ -1,19 +1,38 @@
-import Layout from "@/components/template/Layout";
+import Layout from "@/components/layout/Layout";
+import { theme } from "@/configs/theme";
 import { AuthProvider } from "@/context/AuthContext";
 import { SettingsConsumer, SettingsProvider } from "@/context/SettingContext";
 import "@/styles/globals.css";
+import { CssBaseline } from "@mui/material";
 import type { AppProps } from "next/app";
+import { NextPage } from "next";
+import { ThemeProvider } from "styled-components";
+import React, { useState } from "react";
+import wrapper from "./../store/configureStore";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-export default function App({ Component, pageProps }: AppProps) {
+type ExtendedAppProps = AppProps & {
+  Component: NextPage;
+};
+
+const App = ({ Component, pageProps }: ExtendedAppProps) => {
+  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+  const [client] = useState(() => new QueryClient());
   return (
     <>
-      <AuthProvider>
-        <SettingsProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </SettingsProvider>
-      </AuthProvider>
+      <React.StrictMode>
+        <QueryClientProvider client={client}>
+          <AuthProvider>
+            <SettingsProvider>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                {getLayout(<Component {...pageProps} />)}
+              </ThemeProvider>
+            </SettingsProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </React.StrictMode>
     </>
   );
-}
+};
+export default wrapper.withRedux(App);
