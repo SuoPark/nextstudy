@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { createContext, ReactNode, useEffect, useState } from "react";
-
+import { useSession, signIn, signOut } from "next-auth/react";
+import { Button } from "@mui/material";
 export interface AuthValuesType {
   logout: () => void;
   user: userDataType | null;
@@ -30,9 +31,10 @@ interface Props {
 
 const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<userDataType | null>(defalutProvider.user);
+  const { data } = useSession();
   const router = useRouter();
   useEffect(() => {
-    initAuth();
+    //initAuth();
   }, []);
 
   const handleLogout = () => {
@@ -61,7 +63,16 @@ const AuthProvider = ({ children }: Props) => {
     logout: handleLogout,
     login: handleLogin,
   };
-  return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
+  console.log(data);
+  if (!data) {
+    console.log("@");
+    return <Button onClick={() => signIn()}>signin</Button>;
+  } else {
+    console.log("!");
+    return (
+      <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
+    );
+  }
 };
 
 export { AuthContext, AuthProvider };

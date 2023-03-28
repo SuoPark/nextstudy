@@ -11,29 +11,26 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { SettingsProvider } from "@/context/SettingContext";
 import { SessionProvider } from "next-auth/react";
 
-type ExtendedAppProps = AppProps & {
-  Component: NextPage;
-};
-
-const App = ({ Component, pageProps }: ExtendedAppProps) => {
-  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+const App = ({ Component, pageProps }: AppProps) => {
+  //const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
   const [client] = useState(() => new QueryClient());
+  console.log("session:" + pageProps.session);
   return (
     <>
-      <React.StrictMode>
-        <SessionProvider session={pageProps.session}>
-          <QueryClientProvider client={client}>
-            <AuthProvider>
-              <SettingsProvider>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  {getLayout(<Component {...pageProps} />)}
-                </ThemeProvider>
-              </SettingsProvider>
-            </AuthProvider>
-          </QueryClientProvider>
-        </SessionProvider>
-      </React.StrictMode>
+      <SessionProvider session={pageProps.session}>
+        <QueryClientProvider client={client}>
+          <AuthProvider>
+            <SettingsProvider>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </ThemeProvider>
+            </SettingsProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </SessionProvider>
     </>
   );
 };
