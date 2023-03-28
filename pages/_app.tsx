@@ -1,7 +1,6 @@
 import Layout from "@/components/layout/Layout";
 import { theme } from "@/configs/theme";
 import { AuthProvider } from "@/context/AuthContext";
-import { SettingsConsumer, SettingsProvider } from "@/context/SettingContext";
 import { CssBaseline } from "@mui/material";
 import type { AppProps } from "next/app";
 import { NextPage } from "next";
@@ -9,6 +8,7 @@ import { ThemeProvider } from "styled-components";
 import React, { useState } from "react";
 import wrapper from "./../store/configureStore";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { SettingsProvider } from "@/context/SettingContext";
 
 type ExtendedAppProps = AppProps & {
   Component: NextPage;

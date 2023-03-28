@@ -56,7 +56,7 @@ const SearchListProvider = ({
   // );
 
   const { data, isLoading, refetch } = useQuery<IResType, AxiosError>(
-    [QUERY_KEYS.SAMPLE_LIST1, params],
+    [queryKey, params],
     () => fetcher({ api, options: params || {} }).then(({ data }) => data),
     {
       refetchOnWindowFocus: false,

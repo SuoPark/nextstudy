@@ -17,6 +17,7 @@ const StyledDiv = styled("div")`
   padding-right: 2rem;
   background-color: white;
   z-index: 10000;
+  box-shadow: 0px 11px 17px 0px #9393933b;
 `;
 
 const StyledSpan = styled.span`

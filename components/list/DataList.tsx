@@ -15,7 +15,6 @@ interface props {
 
 export default function BasicTable({ context }: props) {
   const searchListContext = useContext(context);
-  console.log(searchListContext);
   function createData() {
     const rows: { [key: string]: any }[] = [];
     searchListContext.content.map((item) => {

@@ -9,9 +9,9 @@ import QUERY_KEYS from "@/assets/constants/queries";
 const SampleList1 = () => {
   return (
     <SearchListProvider
-      api={API_BOARD.SAMPLE_LIST1}
+      api={API_BOARD.SAMPLE_LIST2}
       isQueryString={false}
-      queryKey={QUERY_KEYS.SAMPLE_LIST1}
+      queryKey={QUERY_KEYS.SAMPLE_LIST2}
     >
       <DataList context={SearchLsitContext} />
     </SearchListProvider>
