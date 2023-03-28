@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import wrapper from "./../store/configureStore";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SettingsProvider } from "@/context/SettingContext";
+import { SessionProvider } from "next-auth/react";
 
 type ExtendedAppProps = AppProps & {
   Component: NextPage;
@@ -20,16 +21,18 @@ const App = ({ Component, pageProps }: ExtendedAppProps) => {
   return (
     <>
       <React.StrictMode>
-        <QueryClientProvider client={client}>
-          <AuthProvider>
-            <SettingsProvider>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                {getLayout(<Component {...pageProps} />)}
-              </ThemeProvider>
-            </SettingsProvider>
-          </AuthProvider>
-        </QueryClientProvider>
+        <SessionProvider session={pageProps.session}>
+          <QueryClientProvider client={client}>
+            <AuthProvider>
+              <SettingsProvider>
+                <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  {getLayout(<Component {...pageProps} />)}
+                </ThemeProvider>
+              </SettingsProvider>
+            </AuthProvider>
+          </QueryClientProvider>
+        </SessionProvider>
       </React.StrictMode>
     </>
   );

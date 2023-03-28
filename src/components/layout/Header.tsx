@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import logo from "../../images/logo.png";
+import logo from "../../../images/logo.png";
 
 const StyledDiv = styled("div")`
   display: flex;

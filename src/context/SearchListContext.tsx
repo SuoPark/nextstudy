@@ -1,4 +1,3 @@
-import QUERY_KEYS from "@/assets/constants/queries";
 import { IApi } from "@/type/common";
 import fetcher from "@/utils/fetcher";
 import axios, { AxiosError } from "axios";

@@ -1,9 +1,10 @@
 import { Box, List, ListItemButton, ListItemText } from "@mui/material";
 import { useContext, useEffect } from "react";
-import { sampleData } from "../../sampleData";
+
 import styled from "@emotion/styled";
 import { Settings, SettingsContext } from "@/context/SettingContext";
 import Link from "next/link";
+import { sampleData } from "@/sampleData";
 
 const SideLayout = () => {
   const settings = useContext(SettingsContext);
