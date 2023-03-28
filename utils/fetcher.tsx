@@ -3,7 +3,7 @@ import axios from "axios";
 
 const axiosInstance = () => {
   return axios.create({
-    baseURL: "localhost:8080",
+    //baseURL: "http://localhost:8080",
     timeout: 100000,
     withCredentials: false,
   });
@@ -17,7 +17,6 @@ const fetcher = async function ({
   options?: { [key: string]: any };
 }) {
   const ax = axiosInstance();
-  console.log("@");
   if (api.method === "get") {
     return await ax.request({
       ...api,

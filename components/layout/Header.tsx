@@ -49,7 +49,7 @@ const Header = () => {
           <Image src={logo} alt="logo" width={140} height={49} />
         </Link>
         <div>
-          <StyledSpan>WeleCome {loginInfo?.userName}</StyledSpan>
+          <StyledSpan>WelCome {loginInfo?.userName}</StyledSpan>
           <Button
             onClick={() => {
               auth.logout();

@@ -54,17 +54,13 @@ const SearchListProvider = ({
   //     refetchOnMount: true,
   //   }
   // );
-  async function ssss() {
-    console.log("@");
-    return await axios.get(api.url).then(({ data }) => data.data);
-  }
+
   const { data, isLoading, refetch } = useQuery<IResType, AxiosError>(
-    [queryKey || api.url || QUERY_KEYS.SAMPLE_LIST1, params],
-    () => ssss().then((data) => data.data),
+    [QUERY_KEYS.SAMPLE_LIST1, params],
+    () => fetcher({ api, options: params || {} }).then(({ data }) => data),
     {
-      enabled: !!params,
-      refetchOnWindowFocus: true,
-      refetchOnMount: true,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
   useEffect(() => {
