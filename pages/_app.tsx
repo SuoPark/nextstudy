@@ -2,7 +2,6 @@ import Layout from "@/components/layout/Layout";
 import { theme } from "@/configs/theme";
 import { AuthProvider } from "@/context/AuthContext";
 import { SettingsConsumer, SettingsProvider } from "@/context/SettingContext";
-import "@/styles/globals.css";
 import { CssBaseline } from "@mui/material";
 import type { AppProps } from "next/app";
 import { NextPage } from "next";
