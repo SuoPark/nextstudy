@@ -1,16 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   compiler: {
     styledComponents: true,
   },
-  async rewrites() {
-    return [
-      {
-        source: "/:path*",
-        destination: "http://localhost:8080/:path*",
-      },
-    ];
+  env: {
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
 };
 
