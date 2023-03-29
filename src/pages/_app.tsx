@@ -24,21 +24,19 @@ const App = ({ Component, pageProps }: ExtendedAppProps) => {
   return (
     <>
       <Provider store={store}>
-        <SessionProvider session={pageProps.session}>
-          <QueryClientProvider client={client}>
-            <AuthProvider>
-              <SettingsProvider>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  {getLayout(<Component {...pageProps} />)}
-                  {/* <Layout>
+        <QueryClientProvider client={client}>
+          <AuthProvider>
+            <SettingsProvider>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                {getLayout(<Component {...pageProps} />)}
+                {/* <Layout>
                     <Component {...pageProps} />
                   </Layout> */}
-                </ThemeProvider>
-              </SettingsProvider>
-            </AuthProvider>
-          </QueryClientProvider>
-        </SessionProvider>
+              </ThemeProvider>
+            </SettingsProvider>
+          </AuthProvider>
+        </QueryClientProvider>
       </Provider>
     </>
   );

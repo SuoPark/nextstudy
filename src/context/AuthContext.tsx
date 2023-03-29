@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { Button } from "@mui/material";
-import LoginBox from "./../components/login/LoginBox";
 export interface AuthValuesType {
   logout: () => void;
   user: userDataType | null;
@@ -15,8 +14,7 @@ export interface AuthValuesType {
 
 export interface userDataType {
   userName: string;
-  email: string;
-  password: string;
+  userEmail: string;
 }
 const defalutProvider: AuthValuesType = {
   logout: () => null,
@@ -33,37 +31,30 @@ interface Props {
 
 const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<userDataType | null>(defalutProvider.user);
-  const { data } = useSession();
   const router = useRouter();
   useEffect(() => {
-    // initAuth();
+    initAuth();
   }, []);
 
   const handleLogout = () => {
     setUser(null);
+    localStorage.removeItem("test_login");
     router.push("/auth/signIn");
     signOut();
   };
 
-  const handleLogin = async ({ email, userName, password }: userDataType) => {
-    setUser({ email, userName, password });
-    console.log("!");
-    const response = await signIn("email-password-credential", {
-      email,
-      password,
-      redirect: false,
-    });
-    console.log(response);
+  const handleLogin = ({ userEmail, userName }: userDataType) => {
+    setUser({ userEmail, userName });
+    localStorage.setItem("test_login", JSON.stringify({ userEmail, userName }));
+    router.replace(`/`);
   };
 
   const initAuth = () => {
     const loginData = localStorage.getItem("test_login");
-    if (!data) {
-      signIn();
+
+    if (!loginData) {
+      router.replace(`/auth/signIn`);
     }
-    // if (!loginData) {
-    //   router.replace(`/auth/signIn`);
-    // }
   };
 
   const values = {
@@ -72,9 +63,7 @@ const AuthProvider = ({ children }: Props) => {
     logout: handleLogout,
     login: handleLogin,
   };
-  if (!data) {
-    return <Button onClick={() => signIn()}>Login</Button>;
-  }
+
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 };
 
