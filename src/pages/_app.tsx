@@ -12,11 +12,14 @@ import { SettingsProvider } from "@/context/SettingContext";
 import { SessionProvider } from "next-auth/react";
 
 import { Provider } from "react-redux";
-
-const App = ({ Component, pageProps }: AppProps) => {
-  //const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
+import { NextPage } from "next";
+type ExtendedAppProps = AppProps & {
+  Component: NextPage;
+};
+const App = ({ Component, pageProps }: ExtendedAppProps) => {
+  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
   const [client] = useState(() => new QueryClient());
-  console.log("session:" + pageProps.session);
+
   const { store } = wrapper.useWrappedStore(pageProps);
   return (
     <>
@@ -27,9 +30,10 @@ const App = ({ Component, pageProps }: AppProps) => {
               <SettingsProvider>
                 <ThemeProvider theme={theme}>
                   <CssBaseline />
-                  <Layout>
+                  {getLayout(<Component {...pageProps} />)}
+                  {/* <Layout>
                     <Component {...pageProps} />
-                  </Layout>
+                  </Layout> */}
                 </ThemeProvider>
               </SettingsProvider>
             </AuthProvider>

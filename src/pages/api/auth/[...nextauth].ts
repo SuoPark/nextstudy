@@ -10,9 +10,8 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        console.log(credentials);
         const user = {
-          id: "Email",
+          id: credentials?.email || "",
           email: credentials?.email,
           password: credentials?.password,
         };
@@ -20,4 +19,7 @@ export default NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/auth/signIn",
+  },
 });
