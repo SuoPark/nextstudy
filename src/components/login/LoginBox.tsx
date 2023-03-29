@@ -17,9 +17,8 @@ const LoginBox = () => {
   const [email, setEmail] = useState<string>("");
   const [passWord, setPassWord] = useState<string>("");
   const login = (event: React.FormEvent) => {
-    console.log("@");
     event.preventDefault();
-    auth.login({ email: email, userName: "test", password: passWord });
+    auth.login({ userEmail: email, userName: "test" });
   };
 
   return (

@@ -9,7 +9,6 @@ import React, { useState } from "react";
 import wrapper from "./../store/configureStore";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SettingsProvider } from "@/context/SettingContext";
-import { SessionProvider } from "next-auth/react";
 
 import { Provider } from "react-redux";
 import { NextPage } from "next";
@@ -24,21 +23,16 @@ const App = ({ Component, pageProps }: ExtendedAppProps) => {
   return (
     <>
       <Provider store={store}>
-        <SessionProvider session={pageProps.session}>
-          <QueryClientProvider client={client}>
-            <AuthProvider>
-              <SettingsProvider>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  {getLayout(<Component {...pageProps} />)}
-                  {/* <Layout>
-                    <Component {...pageProps} />
-                  </Layout> */}
-                </ThemeProvider>
-              </SettingsProvider>
-            </AuthProvider>
-          </QueryClientProvider>
-        </SessionProvider>
+        <QueryClientProvider client={client}>
+          <AuthProvider>
+            <SettingsProvider>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                {getLayout(<Component {...pageProps} />)}
+              </ThemeProvider>
+            </SettingsProvider>
+          </AuthProvider>
+        </QueryClientProvider>
       </Provider>
     </>
   );
