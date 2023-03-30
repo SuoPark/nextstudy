@@ -26,21 +26,13 @@ const StyledSpan = styled.span`
   font-size: 15px;
 `;
 
-type loginInfoType = {
-  userName: string | null;
-  userEmail: string | null;
-};
 const Header = () => {
   const auth = useContext(AuthContext);
-  const [loginInfo, setLoginInfo] = useState<loginInfoType>();
+  const [userEmail, setUserEmail] = useState<string>("");
   useEffect(() => {
-    const item = localStorage.getItem("test_login");
-    if (item) {
-      const loginData = JSON.parse(item);
-      setLoginInfo({
-        userName: loginData.userName,
-        userEmail: loginData.userEmail,
-      });
+    const email = localStorage.getItem("userEmail");
+    if (email) {
+      setUserEmail(email);
     }
   }, []);
   return (
@@ -50,7 +42,7 @@ const Header = () => {
           <Image src={logo} alt="logo" width={140} height={49} />
         </Link>
         <div>
-          <StyledSpan>WelCome {loginInfo?.userName}</StyledSpan>
+          <StyledSpan>WelCome {userEmail}</StyledSpan>
           <Button
             onClick={() => {
               auth.logout();
