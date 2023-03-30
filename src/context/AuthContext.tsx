@@ -1,6 +1,10 @@
 import { useRouter } from "next/router";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import useSignIn, { setToken, userLoginType } from "./../hooks/useSignIn";
+import useSignIn, {
+  fetchAdminInfo,
+  setToken,
+  userLoginType,
+} from "./../hooks/useSignIn";
 import { useQuery, useQueryClient } from "react-query";
 import { QueryClient } from "react-query";
 import QUERY_KEYS from "@/assets/constants/queries";
@@ -31,6 +35,7 @@ interface Props {
 const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<userLoginType | null>(defalutProvider.user);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const cookies = new Cookies();
   const { mutate } = useSignIn();
   useEffect(() => {
@@ -52,9 +57,13 @@ const AuthProvider = ({ children }: Props) => {
         const returnUrl = router.query.returnUrl;
         const redirectUrl = returnUrl && returnUrl !== "/" ? returnUrl : "/";
         setToken({ accessToken, refreshToken });
-        //queryClient.fetchQuery([QUERY_KEYS.SIGNIN],);
-        setUser({ email: params.email, password: params.password });
-        localStorage.setItem("userEmail", params.email);
+        queryClient
+          .fetchQuery([QUERY_KEYS.SIGN_IN], fetchAdminInfo)
+          .then((userData) => {
+            setUser(userData);
+            localStorage.setItem("userEmail", userData.email);
+          });
+
         router.replace(redirectUrl as string);
       },
       onError: (error: any) => {
@@ -64,9 +73,16 @@ const AuthProvider = ({ children }: Props) => {
   };
 
   const initAuth = () => {
-    const loginData = localStorage.getItem("userEmail");
+    const { accessToken } = cookies.getAll();
 
-    if (!loginData) {
+    if (accessToken) {
+      queryClient
+        .fetchQuery([QUERY_KEYS.SIGN_IN], fetchAdminInfo)
+        .then((userData) => {
+          setUser(userData);
+          localStorage.setItem("userEmail", userData.email);
+        });
+    } else {
       router.replace(`/auth/signIn`);
     }
   };

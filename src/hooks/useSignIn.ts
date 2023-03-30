@@ -16,7 +16,7 @@ export interface tokensType {
 }
 
 export const fetch = async (options: userLoginType) =>
-  await fetcher({ api: API_AUTH.SIGNIN, options }).then(({ data }) => data);
+  await fetcher({ api: API_AUTH.SIGN_IN, options }).then(({ data }) => data);
 
 export const setToken = ({ accessToken, refreshToken }: tokensType) => {
   const cookies = new Cookies();
@@ -24,6 +24,9 @@ export const setToken = ({ accessToken, refreshToken }: tokensType) => {
   cookies.set("accessToken", accessToken, { path: "/" });
   cookies.set("refreshToken", refreshToken, { path: "/" });
 };
+
+export const fetchAdminInfo = async () =>
+  await fetcher({ api: API_AUTH.ADMIN_INFO }).then(({ data }) => data.data);
 
 const useSignIn = (
   options?: UseMutationOptions<
