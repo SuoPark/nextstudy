@@ -14,11 +14,11 @@ import { useState, useContext } from "react";
 
 const LoginBox = () => {
   const auth = useContext(AuthContext);
-  const [email, setEmail] = useState<string>("");
-  const [passWord, setPassWord] = useState<string>("");
+  const [id, setId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const login = (event: React.FormEvent) => {
     event.preventDefault();
-    auth.login({ email: email, password: passWord });
+    auth.login({ userId: id, password: password });
   };
 
   return (
@@ -42,14 +42,14 @@ const LoginBox = () => {
               <Grid item>
                 <TextField
                   fullWidth
-                  label="email"
+                  label="ID"
                   variant="outlined"
                   color="primary"
-                  value={email}
+                  value={id}
                   onChange={(e) => {
-                    setEmail(e.target.value);
+                    setId(e.target.value);
                   }}
-                  type="email"
+                  type="text"
                 />
               </Grid>
               <Grid item>
@@ -58,9 +58,9 @@ const LoginBox = () => {
                   label="password"
                   variant="outlined"
                   color="primary"
-                  value={passWord}
+                  value={password}
                   onChange={(e) => {
-                    setPassWord(e.target.value);
+                    setPassword(e.target.value);
                   }}
                   type="password"
                 />

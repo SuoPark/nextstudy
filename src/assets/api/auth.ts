@@ -1,16 +1,16 @@
-import { IApi } from "@/type/common";
+import { IApi } from "@/types/common";
 
 const API_AUTH: { [key: string]: IApi } = {
   SIGN_IN: {
-    url: "/api/admin/auth/signin",
+    url: "/api/adm/auth/signin",
     method: "post",
   },
   ADMIN_INFO: {
-    url: "/api/admin/auth/adminInfo",
+    url: "/api/adm/auth/adminInfo",
     method: "get",
   },
   REFRESH_TOKEN: {
-    url: "/api/admin/auth/refreshtoken",
+    url: "/api/adm/auth/refreshtoken",
     method: "post",
   },
 };

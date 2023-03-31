@@ -1,4 +1,4 @@
-import { IApi } from "@/type/common";
+import { IApi } from "@/types/common";
 import fetcher from "@/utils/fetcher";
 import axios, { AxiosError } from "axios";
 import { createContext, ReactNode, useEffect, useState } from "react";

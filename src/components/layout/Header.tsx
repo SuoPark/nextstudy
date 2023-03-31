@@ -28,11 +28,11 @@ const StyledSpan = styled.span`
 
 const Header = () => {
   const auth = useContext(AuthContext);
-  const [userEmail, setUserEmail] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
   useEffect(() => {
-    const email = localStorage.getItem("userEmail");
-    if (email) {
-      setUserEmail(email);
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+      setUserId(userId);
     }
   }, []);
   return (
@@ -42,7 +42,7 @@ const Header = () => {
           <Image src={logo} alt="logo" width={140} height={49} />
         </Link>
         <div>
-          <StyledSpan>WelCome {userEmail}</StyledSpan>
+          <StyledSpan>WelCome {userId}</StyledSpan>
           <Button
             onClick={() => {
               auth.logout();

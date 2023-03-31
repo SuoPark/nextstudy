@@ -6,16 +6,16 @@ import API_BOARD from "@/assets/api/board";
 import DataList from "./DataList";
 import QUERY_KEYS from "@/assets/constants/queries";
 
-const SampleList2 = () => {
+const SampleList5 = () => {
   return (
     <SearchListProvider
-      api={API_BOARD.SAMPLE_LIST2}
+      api={API_BOARD.SAMPLE_LIST5}
       isQueryString={false}
-      queryKey={QUERY_KEYS.SAMPLE_LIST2}
+      queryKey={QUERY_KEYS.SAMPLE_LIST5}
     >
       <DataList context={SearchLsitContext} />
     </SearchListProvider>
   );
 };
 
-export default SampleList2;
+export default SampleList5;

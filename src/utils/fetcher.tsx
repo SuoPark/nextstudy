@@ -1,11 +1,11 @@
-import { setToken } from "@/hooks/useSignIn";
-import { IApi } from "@/type/common";
+import { setToken } from "@/hooks/queries/useSignIn";
+import { IApi } from "@/types/common";
 import axios from "axios";
 import { Cookies } from "react-cookie";
 
 const axiosInstance = () => {
   return axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "http://localhost:7090",
     timeout: 100000,
     withCredentials: false,
   });
@@ -40,6 +40,7 @@ const fetcher = async function ({
     return await ax.request({
       ...api,
       url: api.url,
+      data: options,
     });
   }
 };
