@@ -1,3 +1,4 @@
+import OneToOneComp from "@/components/dashBoard/OneToOneComp";
 import { Grid } from "@mui/material";
 import { Container } from "@mui/material";
 import SampleList1 from "./list/SampleList1";
@@ -10,11 +11,8 @@ export default function Home() {
   return (
     <Container sx={{ mt: 2, mb: 2 }} maxWidth={false}>
       <Grid container spacing={2}>
-        {/* <SampleList1 />
-        <SampleList2 />
-        <SampleList3 />
-        <SampleList4 />
-        <SampleList5 /> */}
+        메인입니다.
+        <OneToOneComp />
       </Grid>
     </Container>
   );

@@ -21,5 +21,9 @@ const API_BOARD: { [key: string]: IApi } = {
     url: "/test/get/sampleList5",
     method: "get",
   },
+  ONE_TO_ONE_QUESTION_LIST: {
+    url: "/api/adm/board/oneToOneQuestion/list",
+    method: "get",
+  },
 };
 export default API_BOARD;
