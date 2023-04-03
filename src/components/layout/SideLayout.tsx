@@ -4,7 +4,8 @@ import { useContext, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Settings, SettingsContext } from "@/context/SettingContext";
 import Link from "next/link";
-import { sampleData } from "@/sampleData";
+
+import { useAuth } from "@/hooks/useAuth";
 
 const SideLayout = () => {
   const settings = useContext(SettingsContext);
@@ -14,6 +15,9 @@ const SideLayout = () => {
     const item: Settings = { itemIndex: index };
     saveSettings(item);
   };
+  const auth = useAuth();
+  const items = auth.user?.adminMenuList.children || [];
+
   const StyledListItem = styled(ListItemButton)({
     backgroundColor: "transparent",
     outline: "0",
@@ -45,9 +49,9 @@ const SideLayout = () => {
   return (
     <Box sx={{ width: "100%", maxWidth: 360 }}>
       <List component="nav" aria-label="secondary mailbox folder">
-        {sampleData.map((data, i) => {
+        {items.map((data, i) => {
           return (
-            <Link key={i} href={data.url}>
+            <Link key={i} href={data.menuUrl || ""}>
               <StyledListItem
                 selected={settings.settings.itemIndex === i}
                 onClick={() => updateSettings(i)}
@@ -66,7 +70,7 @@ const SideLayout = () => {
                       : "",
                 }}
               >
-                <ListItemText primary={data.content} />
+                <ListItemText primary={data.menuName} />
               </StyledListItem>
             </Link>
           );

@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import API_AUTH from "@/assets/api/auth";
 import fetcher from "@/utils/fetcher";
 import axios from "axios";
+import { breadcrumbsActions } from "@/store/reducers/breadcrumbsReducer";
 
 const defaultProvider: AuthValuesType = {
   user: null,
@@ -53,24 +54,25 @@ const AuthProvider = ({ children }: Props) => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate } = useSignIn();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     initAuth();
   }, []);
 
-  // useEffect(() => {
-  //   if (user) {
-  //     const { pathname } = router;
-  //     const { adminMenuList } = user;
-  //     dispatch(
-  //       breadcrumbsActions.setBreadCrumbs({ menuList: adminMenuList, pathname })
-  //     );
-  //   }
-  //   return () => {
-  //     dispatch(breadcrumbsActions.clear({}));
-  //   };
-  // }, [user, router.route]);
+  useEffect(() => {
+    if (user) {
+      const { pathname } = router;
+      const { adminMenuList } = user;
+
+      dispatch(
+        breadcrumbsActions.setBreadCrumbs({ menuList: adminMenuList, pathname })
+      );
+    }
+    return () => {
+      dispatch(breadcrumbsActions.clear({}));
+    };
+  }, [user, router.route]);
 
   const handleLogout = () => {
     setIsInitialized(false);

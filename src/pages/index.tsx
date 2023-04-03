@@ -1,11 +1,6 @@
 import OneToOneComp from "@/components/dashBoard/OneToOneComp";
 import { Grid } from "@mui/material";
 import { Container } from "@mui/material";
-import SampleList1 from "./list/SampleList1";
-import SampleList2 from "./list/SampleList2";
-import SampleList3 from "./list/SampleList3";
-import SampleList4 from "./list/SampleList4";
-import SampleList5 from "./list/SampleList5";
 
 export default function Home() {
   return (

@@ -69,7 +69,7 @@ const SearchListProvider = ({
   const [content, setContent] = useState<{ [key: string]: any }[]>([]);
   const { data, isLoading, refetch } = useQuery<IResType, AxiosError>(
     [queryKey, params],
-    () => fetcher({ api, options: params || {} }).then(({ data }) => data),
+    () => fetcher({ api, options: params || {} }).then(({ data }) => data.data),
     {
       enabled: (!isSearchForm && isEnabled) || !!params,
       refetchOnWindowFocus: false,
@@ -173,6 +173,7 @@ const SearchListProvider = ({
     refetch,
     setContent,
   };
+
   return (
     <SearchLsitContext.Provider value={values}>
       {children}

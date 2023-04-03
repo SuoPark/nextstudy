@@ -1,12 +1,11 @@
 import type { AnyAction, CombinedState } from "@reduxjs/toolkit";
 import { combineReducers } from "@reduxjs/toolkit";
-
-import sampleList1Reducer, { ISampleList1Type } from "./sampleList1Reducer";
-import sampleList2Reducer, { ISampleList2Type } from "./sampleList2Reducer";
+import breadcrumbsReducer, {
+  IBreadcrumbsStateType,
+} from "./breadcrumbsReducer";
 
 interface ReducerState {
-  sampleList1: ISampleList1Type;
-  sampleList2: ISampleList2Type;
+  breadcrumbs: IBreadcrumbsStateType;
 }
 
 const rootReducer = (
@@ -16,8 +15,7 @@ const rootReducer = (
   switch (action.type) {
     default:
       return combineReducers({
-        sampleList1: sampleList1Reducer,
-        sampleList2: sampleList2Reducer,
+        breadcrumbs: breadcrumbsReducer,
       })(state, action);
   }
 };
