@@ -1,4 +1,4 @@
-import OneToOneComp from "@/components/dashBoard/OneToOneComp";
+import OneToOneComp from "@/components/dashBoard/OneToOneQuestion/OneToOneComp";
 import { Grid } from "@mui/material";
 import { Container } from "@mui/material";
 

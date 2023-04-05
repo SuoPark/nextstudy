@@ -3,9 +3,11 @@ import { combineReducers } from "@reduxjs/toolkit";
 import breadcrumbsReducer, {
   IBreadcrumbsStateType,
 } from "./breadcrumbsReducer";
+import dialogsReducer, { IDialogsStateType } from "./dialogsReducer";
 
 interface ReducerState {
   breadcrumbs: IBreadcrumbsStateType;
+  dialogs: IDialogsStateType;
 }
 
 const rootReducer = (
@@ -16,6 +18,7 @@ const rootReducer = (
     default:
       return combineReducers({
         breadcrumbs: breadcrumbsReducer,
+        dialogs: dialogsReducer,
       })(state, action);
   }
 };

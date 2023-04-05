@@ -3,10 +3,11 @@ import { SearchListProvider } from "@/context/SearchListContext";
 import { Square as SquareIcon } from "@mui/icons-material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Grid, Card, CardHeader, Tab } from "@mui/material";
-import useTabs from "./../../hooks/useTabs";
+
 import CelebrityOneToOneQuestionComp from "./ALLOneToOneQuestionComp";
 import CustomerOneToOneQuestionComp from "./CustomerOneToOneQuestionComp";
 import ALLOneToOneQuestionComp from "./ALLOneToOneQuestionComp";
+import useTabs from "@/hooks/useTabs";
 const OneToOneComp = () => {
   const tab = useTabs({ initialValue: "1" });
   return (

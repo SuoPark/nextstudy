@@ -18,6 +18,7 @@ import API_AUTH from "@/assets/api/auth";
 import fetcher from "@/utils/fetcher";
 import axios from "axios";
 import { breadcrumbsActions } from "@/store/reducers/breadcrumbsReducer";
+import toast from "react-hot-toast";
 
 const defaultProvider: AuthValuesType = {
   user: null,
@@ -108,14 +109,14 @@ const AuthProvider = ({ children }: Props) => {
           router.replace(redirectURL as string);
         } else if (success === false) {
           console.log("success실패진입");
-          alert(message);
+          toast.error(message, { duration: 5000 });
         } else {
           console.log("etc진입");
-          alert(message);
+          toast.error(message);
         }
       },
       onError: (error: any) => {
-        alert(error.response.data.message);
+        toast.error(error.response.data.message, { duration: 5000 });
         if (errorCallback) {
           errorCallback(error);
         }

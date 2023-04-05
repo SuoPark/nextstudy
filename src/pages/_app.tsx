@@ -5,14 +5,16 @@ import { CssBaseline } from "@mui/material";
 import type { AppContext, AppInitialProps, AppProps } from "next/app";
 
 import { ThemeProvider } from "styled-components";
-import React, { useState } from "react";
-import wrapper from "./../store/configureStore";
+import React, { Fragment, useState } from "react";
+import wrapper, { RootState } from "./../store/configureStore";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { SettingsProvider } from "@/context/SettingContext";
 
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { NextPage } from "next";
 import axios from "axios";
+import { Toaster } from "react-hot-toast";
+import { cookieStringToObject } from "@/utils/utils";
 type ExtendedAppProps = AppProps & {
   Component: NextPage;
 };
@@ -20,54 +22,46 @@ const App = ({ Component, pageProps }: ExtendedAppProps) => {
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>);
   const [client] = useState(() => new QueryClient());
 
-  const { store } = wrapper.useWrappedStore(pageProps);
+  const { dialogs } = useSelector(({ dialogs }: RootState) => dialogs);
   return (
     <>
-      <Provider store={store}>
-        <QueryClientProvider client={client}>
-          <AuthProvider>
-            <SettingsProvider>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                {getLayout(<Component {...pageProps} />)}
-              </ThemeProvider>
-            </SettingsProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </Provider>
+      <QueryClientProvider client={client}>
+        <AuthProvider>
+          <SettingsProvider>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              {getLayout(<Component {...pageProps} />)}
+              {dialogs.map(({ comp }, i) => (
+                <Fragment key={i}>{comp}</Fragment>
+              ))}
+              <Toaster />
+            </ThemeProvider>
+          </SettingsProvider>
+        </AuthProvider>
+      </QueryClientProvider>
     </>
   );
 };
-// const cookieStringToObject = (cookieString: string): { [key: string]: any } => {
-//   const result: { [key: string]: string } = {};
-//   if (cookieString) {
-//     const cookies = cookieString.split("; ");
-//     cookies.forEach((cookie) => {
-//       const cur = cookie.split("=");
-//       result[cur[0]] = cur[1];
-//     });
-//   }
-//   return result;
-// };
-// App.getInitialProps = async ({
-//   ctx,
-//   Component,
-// }: AppContext): Promise<AppInitialProps> => {
-//   let pageProps = {};
-//   const cookieReq: any = ctx.req ? ctx.req.headers.cookie : null;
-//   const { accessToken, refreshToken } = cookieStringToObject;
-//   if (accessToken) {
-//     // ssr axios 토큰 설정
-//     axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-//   }
-//   if (Component.getInitialProps) {
-//     pageProps = await Component.getInitialProps(ctx);
-//   }
 
-//   return {
-//     pageProps: {
-//       ...pageProps,
-//     },
-//   };
-// };
-export default App;
+App.getInitialProps = async ({
+  ctx,
+  Component,
+}: AppContext): Promise<AppInitialProps> => {
+  let pageProps = {};
+  const cookieReq: any = ctx.req ? ctx.req.headers.cookie : null;
+  const { accessToken, refreshToken } = cookieStringToObject(cookieReq);
+  if (accessToken) {
+    // ssr axios 토큰 설정
+    axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+  }
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return {
+    pageProps: {
+      ...pageProps,
+    },
+  };
+};
+export default wrapper.withRedux(App);

@@ -10,4 +10,7 @@ const createStore = () => {
 };
 
 const wrapper = createWrapper(createStore);
+
+const store = createStore();
+export type RootState = ReturnType<typeof store.getState>;
 export default wrapper;
