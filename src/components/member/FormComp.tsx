@@ -25,12 +25,10 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useGetMenuButtons from "@/hooks/useGetMenuButtons";
 import { IOptions } from "@/types/common";
-
+import EssentialComp from "../common/EssentialComp";
 import usePostCode from "@/hooks/usePostCode";
 import seller from "@/assets/constants/seller";
 
-//
-//
 import customerOptions from "@/assets/constants/customer";
 import BUTTON_CONFIG from "@/assets/api/button";
 import API_MEMBER from "@/assets/api/member";
@@ -44,6 +42,7 @@ import Grid from "@mui/material/Grid";
 import { WarningAmberOutlined } from "@mui/icons-material";
 import CountryModalComp from "../client/seller/countryModal/CountryModalComp";
 import MSG from "@/assets/constants/messages";
+import FileUploadComp from "../common/FileUploadComp";
 
 interface IProps {
   children?: ReactNode;
