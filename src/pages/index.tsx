@@ -7,7 +7,7 @@ export default function Home() {
     <Container sx={{ mt: 2, mb: 2 }} maxWidth={false}>
       <Grid container spacing={2}>
         메인입니다.
-        <OneToOneComp />
+        {/* <OneToOneComp /> */}
       </Grid>
     </Container>
   );

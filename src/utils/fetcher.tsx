@@ -36,13 +36,12 @@ const fetcher = async function ({
       url: api.url,
       params: options,
     });
-  } else {
-    return await ax.request({
-      ...api,
-      url: api.url,
-      data: options,
-    });
   }
+  return await ax.request({
+    ...api,
+    url: api.url,
+    data: options,
+  });
 };
 
 export default fetcher;

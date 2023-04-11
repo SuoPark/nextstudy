@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import DefaultListComp from "../list/DefaultListComp";
 import { useSearchList } from "@/hooks/useSearchList";
+import DefaultListComp from "@/components/list/DefaultListComp";
 
 const CelebrityOneToOneQuestionComp = () => {
   // const dispatch = useDispatch();

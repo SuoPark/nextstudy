@@ -83,8 +83,10 @@ const DefaultListComp = <TRowData extends { [key: string]: any }>({
   buttonStyle,
   isHighLight = false,
 }: IProps<TRowData>) => {
+  //searchlist provider로부터 data load
   const { content, isLoading, paging, params, setContent } = useSearchList();
 
+  //table 형식
   const {
     rows,
     selected,
@@ -94,13 +96,17 @@ const DefaultListComp = <TRowData extends { [key: string]: any }>({
     handleSelect,
     droppableId,
     handleRadioSelect,
+    handleDragEnd,
   } = useTable();
 
+  //a tag
   const StyledLink = styled("a")(({ theme }) => ({
     textDecoration: "underline",
     color: theme.palette.primary.main,
     cursor: "pointer",
   }));
+
+  //data 변화시 테이블 row 업데이트
   useEffect(() => {
     if (content) {
       setRows(content);
@@ -112,23 +118,17 @@ const DefaultListComp = <TRowData extends { [key: string]: any }>({
     };
   }, [content]);
 
+  //체크박스 변화시 동작
   useEffect(() => {
     if (handleCheckedCallback) {
       handleCheckedCallback(selected as TRowData[]);
     }
   }, [selected]);
 
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-    const items = [...rows];
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setContent(items);
-  };
-
   return (
     <>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
+        {/* 조회결과 표시용 */}
         {isResult && (
           <Box sx={{ display: "flex", justifyContent: "flex-start", p: 4 }}>
             <Typography variant="subtitle1">
@@ -146,6 +146,7 @@ const DefaultListComp = <TRowData extends { [key: string]: any }>({
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
+                {/* radio,check box 표시용, 둘 중 하나만 가능 */}
                 {!visibleRadio && visibleCheckBox && (
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -159,6 +160,7 @@ const DefaultListComp = <TRowData extends { [key: string]: any }>({
                 {visibleRadio && !visibleCheckBox && (
                   <TableCell padding="checkbox" />
                 )}
+                {/* props로 받은 column 생성 */}
                 {columns.map(({ label, theadCellFieldProps }, i) => (
                   <TableCell key={i} align="center" {...theadCellFieldProps}>
                     {label}
@@ -166,7 +168,6 @@ const DefaultListComp = <TRowData extends { [key: string]: any }>({
                 ))}
               </TableRow>
             </TableHead>
-
             {!isLoading &&
               (rows.length > 0 ? (
                 <DragDropContext

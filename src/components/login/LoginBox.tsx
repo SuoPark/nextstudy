@@ -1,81 +1,158 @@
 import { AuthContext } from "@/context/AuthContext";
-import styled from "@emotion/styled";
 import {
   Box,
   Button,
   Card,
-  Divider,
-  Grid,
-  Paper,
+  CardContent,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
   TextField,
   Typography,
 } from "@mui/material";
+import { EyeOutline, EyeOffOutline } from "mdi-material-ui";
+import Link from "next/link";
 import { useState, useContext } from "react";
 
 const LoginBox = () => {
   const auth = useContext(AuthContext);
   const [id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const login = (event: React.FormEvent) => {
     event.preventDefault();
     auth.login({ userId: id, password: password });
   };
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignContent="center"
-      sx={{ height: "100vh" }}
+    <Box
+      className="content-center"
+      sx={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#F6F8FA",
+      }}
     >
-      <Grid item xs={3}>
-        <Paper>
-          <Box component="form" onSubmit={login} sx={{ padding: "15px" }}>
-            <Grid container rowSpacing={2} direction={"column"}>
-              <Grid item>
-                <Typography>LOG IN</Typography>
-              </Grid>
-              <Grid item>
-                <Divider />
-              </Grid>
-
-              <Grid item>
-                <TextField
-                  fullWidth
-                  label="ID"
-                  variant="outlined"
-                  color="primary"
-                  value={id}
-                  onChange={(e) => {
-                    setId(e.target.value);
-                  }}
-                  type="text"
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  fullWidth
-                  label="password"
-                  variant="outlined"
-                  color="primary"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                  type="password"
-                />
-              </Grid>
-
-              <Grid item container justifyContent={"right"}>
-                <Button variant="contained" type="submit">
-                  Login
-                </Button>
-              </Grid>
-            </Grid>
+      <Card sx={{ zIndex: 1, width: "28rem" }}>
+        <CardContent sx={{ padding: "30px" }}>
+          <Box
+            sx={{
+              mb: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography
+              variant="h6"
+              sx={{
+                ml: 3,
+                lineHeight: 1,
+                fontWeight: 600,
+                textTransform: "uppercase",
+                fontSize: "1.5rem !important",
+              }}
+            >
+              {"TITLE-LOGIN"}
+            </Typography>
           </Box>
-        </Paper>
-      </Grid>
-    </Grid>
+          <Box sx={{ mb: 3 }}>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 600, marginBottom: 1.5 }}
+            >
+              Welcome to {"TITLE"}! 👋🏻
+            </Typography>
+            <Typography variant="body2">{"sub-title"}</Typography>
+          </Box>
+          <form noValidate autoComplete="off" onSubmit={login}>
+            <TextField
+              autoFocus
+              fullWidth
+              label="ID"
+              value={id}
+              onChange={(e) => {
+                setId(e.target.value);
+              }}
+              sx={{ marginBottom: 4 }}
+            />
+            <FormControl fullWidth>
+              <InputLabel htmlFor="auth-login-password">Password</InputLabel>
+              <OutlinedInput
+                label="Password"
+                value={password}
+                id="auth-login-password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      onClick={() => {
+                        setShowPassword((state) => !state);
+                      }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                      }}
+                      aria-label="toggle password visibility"
+                    >
+                      {showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <Box
+              sx={{
+                mb: 4,
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                justifyContent: "space-between",
+              }}
+            >
+              <FormControlLabel control={<Checkbox />} label="Remember Me" />
+
+              <Link onClick={(e) => e.preventDefault()} href={""}>
+                Forgot Password?
+              </Link>
+            </Box>
+            <Button
+              fullWidth
+              size="large"
+              variant="contained"
+              sx={{ marginBottom: 5 }}
+              type="submit"
+            >
+              Login
+            </Button>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              <Typography variant="body2" sx={{ marginRight: 2 }}>
+                New on our platform?
+              </Typography>
+              <Typography variant="body2">
+                <Link href="">Create an account</Link>
+              </Typography>
+            </Box>
+          </form>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

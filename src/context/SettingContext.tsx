@@ -1,3 +1,4 @@
+import themeConfig from "@/configs/themeConfig";
 import { createContext, ReactNode, useState } from "react";
 
 interface SettingProps {
@@ -5,6 +6,7 @@ interface SettingProps {
 }
 
 export interface Settings {
+  skin: string;
   itemIndex: number;
 }
 export type SettingsContextValue = {
@@ -13,6 +15,10 @@ export type SettingsContextValue = {
 };
 
 const initSettings: Settings = {
+  skin:
+    themeConfig.layout === "horizontal" && themeConfig.skin === "semi-dark"
+      ? "default"
+      : themeConfig.skin,
   itemIndex: 0,
 };
 export const SettingsContext = createContext<SettingsContextValue>({
