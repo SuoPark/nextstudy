@@ -33,6 +33,7 @@ const DialogsComp: React.FC<IProps> = ({
   const dispatch = useDispatch();
   const descriptionElementRef = useRef<HTMLElement>(null);
   const handleClose = () => {
+    //dialog종료시 dialog 제거
     dispatch(dialogsActions.removeDialog({ id }));
   };
 
@@ -60,6 +61,7 @@ const DialogsComp: React.FC<IProps> = ({
           };
         }}
       >
+        {/* 추가한 버튼이 있는 경우 버튼 추가 */}
         {dialogActions && dialogActions.length > 0 && (
           <>
             {dialogActions.map(({ label, fieldProps, onClick }, i) => (
@@ -69,17 +71,16 @@ const DialogsComp: React.FC<IProps> = ({
             ))}
           </>
         )}
-        {(!dialogActions || dialogActions.length === 0) &&
-          isHiden === false && (
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              onClick={handleClose}
-            >
-              닫기
-            </Button>
-          )}
+        {(!dialogActions || dialogActions.length === 0) && isHiden === false && (
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={handleClose}
+          >
+            닫기
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

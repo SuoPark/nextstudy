@@ -26,6 +26,8 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
   const { query } = router;
 
   //useState
+
+  //요약보드 정보
   const [totalAvailablePoint, setTotalAvailablePoint] = useState<number>();
   const [totalIssuedCouponCount, setTotalIssuedCouponCount] =
     useState<number>();
@@ -50,6 +52,7 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
   });
 
   //최상단 요약보드 조회
+  //초기화
   const callbackBoard = async () => {
     const { url, method } = API_MEMBER.MEMBER_BOARD;
     await fetcher({
@@ -89,6 +92,7 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
   );
 
   //handleClick
+  //목록,수정버튼
   const handleClick = (buttonId: string) => {
     if (buttonId === "view-list") {
       router.push({
@@ -102,6 +106,7 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
 
   //useEffect
   useEffect(() => {
+    //요약보드 불러오기
     callbackBoard();
     if (query.tap === "POINT") {
       tab.setValue("POINT");
@@ -110,6 +115,7 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
       data &&
       (data.memberStatusCode === "EXIT" || data.memberStatusCode === "INACTIVE")
     ) {
+      //탈퇴 혹은 비활성 멤버인 경우 버튼 비활성
       setSettingButtons([
         {
           buttonId: "view-list",
@@ -130,6 +136,7 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
   }, []);
 
   return (
+    // 상단 제목
     <>
       {tab.value === "INFO" && (
         <Box style={{ fontWeight: "bold" }}>회원정보</Box>
@@ -155,6 +162,7 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
       {tab.value === "HISTORY" && (
         <Box style={{ fontWeight: "bold" }}>변경이력</Box>
       )}
+      {/* 요약정보 */}
       {memberNo && (
         <>
           {data && (
@@ -214,6 +222,7 @@ const MemberDetail: NextPage<IMemberDetailProps> = ({ memberNo }) => {
             <Tab value="BUY" label="구매후기" />
             <Tab value="HISTORY" label="변경이력" />
           </TabList>
+          {/* 상세정보 */}
           {data && (
             <TabPanel value="INFO">
               <FormComp disabled={true} detailData={data || null}>

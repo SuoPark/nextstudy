@@ -1,5 +1,5 @@
-import { TextField, TextFieldProps } from '@mui/material';
-import { ReactNode } from 'react';
+import { TextField, TextFieldProps } from "@mui/material";
+import { ReactNode } from "react";
 
 interface IProps {
   children: ReactNode;
@@ -13,10 +13,11 @@ interface IProps {
  * @example
  * <EssentialComp>{...}</EssentialComp>
  */
+//필수 별 표시
 const EssentialComp: React.FC<IProps> = function ({ children }) {
   return (
     <>
-      <span style={{ color: 'red' }}>*</span> {children}
+      <span style={{ color: "red" }}>*</span> {children}
     </>
   );
 };

@@ -159,6 +159,7 @@ interface IDuplicateCheck {
   nickNameCheck: boolean;
 }
 
+//유효성
 const schema = yup.object().shape({
   // sellerInfo: yup.object().shape({
   //   sellerName:yup.string().required(MSG.ERROR.REQUIRED),
@@ -192,9 +193,9 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
   const dispatch = useDispatch();
 
   //우편검색
-  const postCode = usePostCode();
-  const sellerPostCode = usePostCode();
-  const celebrityPostCode = usePostCode();
+  const postCode = usePostCode(); //주소
+  const sellerPostCode = usePostCode(); //판매자주소
+  const celebrityPostCode = usePostCode(); //셀럽주소
 
   //성별
   const [isGender, setIsGender] = useState<string>("");
@@ -229,8 +230,10 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
   //회원등급
   const [memberGrade, setMemberGrade] = useState<IOptions[]>([]);
 
+  //정보 변경시 마다
   useEffect(() => {
     if (detailData) {
+      //불러온 데이터로부터 데이터 분리
       const {
         lastLoginDatetime,
         memberName,
@@ -269,6 +272,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
         celebrityMainManager,
         celebrityManagerList,
       } = detailData;
+      //해당 값으로 form 초기화
       reset({
         lastLoginDatetime,
         memberName,
@@ -322,6 +326,8 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
   }, [detailData]);
 
   //button
+  //버튼 세팅
+  //닉네임 체크
   const duplicateNickNameButton = useGetMenuButtons({
     initialButtons: [
       {
@@ -331,6 +337,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     ],
   });
 
+  //주소검색창
   const searchAddressButton = useGetMenuButtons({
     initialButtons: [
       {
@@ -340,6 +347,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     ],
   });
 
+  //판매자 주소 버튼
   const sellerSearchAddressButton = useGetMenuButtons({
     initialButtons: [
       {
@@ -352,6 +360,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     ],
   });
 
+  //셀럽주소버튼
   const celebritySearchAddressButton = useGetMenuButtons({
     initialButtons: [
       {
@@ -364,6 +373,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     ],
   });
 
+  //비밀번호 초기화 버튼
   const passwordResetButtons = useGetMenuButtons({
     initialButtons: [
       {
@@ -378,6 +388,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     ],
   });
 
+  //판매자 국가 버튼
   const sellerNationButtons = useGetMenuButtons({
     initialButtons: [
       {
@@ -396,6 +407,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     ],
   });
 
+  //판매자 계정 확인 버튼
   const sellerAccountVerificationButtons = useGetMenuButtons({
     initialButtons: [
       {
@@ -418,6 +430,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
   const handlePasswordReset = (buttonId: string) => {};
 
   //닉네임 validation
+  //닉네임 중복 체크
   const nickNameValidHandler = async () => {
     await fetcher({
       api: API_MEMBER.MEMBER_NICKNAME_DUPLICATE,
@@ -444,6 +457,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
 
   //Seller 국가 Modal
   const countryModalHandler = () => {
+    //dialog state 셋팅
     dispatch(
       dialogsActions.setDialog({
         id: "countryNo",
@@ -477,6 +491,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     );
   };
 
+  //계정 중복체크
   const accountVerifyHandler = () => {
     setValue("accountVerifyYn", "Y");
   };
@@ -568,10 +583,12 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
   });
 
   //useEffect
+  //에러 발생시
   useEffect(() => {
     if (errors.sellerInfo) {
       console.log("test");
     }
+    //중복체크 경고 dialog
     if (errors.duplicateCheck) {
       if (errors.duplicateCheck.nickNameCheck) {
         dispatch(
@@ -602,15 +619,18 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     }
   }, [errors]);
 
+  //중복체크 확인된 경우
   useEffect(() => {
     if (duplicateCheck) {
+      //form의 중복확인을 true로
       setValue("duplicateCheck", duplicateCheck);
     }
   }, [duplicateCheck]);
 
+  //최초 로드시 회원등급 종류 load
   useEffect(() => {
     memberGradeOptionHandler();
-
+    //국가 코드가 있는 경우 설정
     if (detailData.sellerInfo?.countryNo) {
       countrySelectHandler();
     }
@@ -619,6 +639,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     }
   }, []);
 
+  //국가코드를 통해 국가정보를 불러온 경우 form에 해당 정보 세팅
   useEffect(() => {
     if (countryInfo) {
       setValue("sellerInfo.countryName", countryInfo.countryName);
@@ -633,6 +654,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     }
   }, [celebrityCountryInfo]);
 
+  //주소변동 처리
   useEffect(() => {
     if (postCode.address) {
       setValue("address", postCode.address?.roadAddress);
@@ -655,6 +677,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     }
   }, [celebrityPostCode.openProps]);
 
+  //기타 증빙서류
   const [etcDocumentList, setEtcDocumentList] = useState<IEtcDocumentInfo[]>(
     detailData.etcDocumentList
   );
@@ -662,6 +685,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     ICelebrityEtcDocumentInfo[]
   >(detailData.celebrityEtcDocumentList);
 
+  //증빙서류 form 업데이트
   useEffect(() => {
     setValue("etcDocumentList", etcDocumentList);
   }, [etcDocumentList]);
@@ -684,6 +708,8 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
   useEffect(() => {
     setValue("celebrityManagerList", celebrityManagerList);
   }, [celebrityManagerList]);
+
+  //비활성화 해제시
   useEffect(() => {
     if (!disabled) {
       //회원
@@ -2422,23 +2448,22 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
                         )}
                       </TableCell>
                     </TableRow>
-                    {/*</Table>*/}
                   </TableBody>
                 </Table>
               </TableContainer>
             </CardContent>
           </Card>
-          <Card sx={{ mt: "10px" }}>
+          {/*<Card sx={{ mt: "10px" }}>
             <CardHeader
               title="기타 증빙서류 정보"
               titleTypographyProps={{ variant: "h6" }}
               sx={{ mt: "5px" }}
             />
-            {/* <EtcDocumentList
+            <EtcDocumentList
               etc={etcDocumentList}
               callbackEtc={setEtcDocumentList}
               disabled={disabled}
-            /> */}
+            />
           </Card>
           <Card sx={{ mt: "10px" }}>
             <CardHeader
@@ -2652,11 +2677,11 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
               titleTypographyProps={{ variant: "h6" }}
               sx={{ mt: "5px" }}
             />
-            {/* <ManagerList
+            <ManagerList
               managerInfo={managerList}
               callbackManager={setManagerList}
               disabled={disabled}
-            /> */}
+            />
             <Stack
               direction="row"
               spacing={2}
@@ -2666,10 +2691,10 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
             >
               {children}
             </Stack>
-          </Card>
+          </Card> */}
         </>
       )}
-      {detailData.memberType === "CELEBRITY" && (
+      {/* {detailData.memberType === "CELEBRITY" && (
         <>
           <Card sx={{ mt: "10px" }}>
             <CardHeader
@@ -3449,11 +3474,11 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
               titleTypographyProps={{ variant: "h6" }}
               sx={{ mt: "5px" }}
             />
-            {/* <CelebrityEtcDocumentList
+            <CelebrityEtcDocumentList
               etc={celebrityEtcDocumentList}
               callbackEtc={setCelebrityEtcDocumentList}
               disabled={disabled}
-            /> */}
+            />
           </Card>
           <Card sx={{ mt: "10px" }}>
             <CardHeader
@@ -3675,11 +3700,11 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
               titleTypographyProps={{ variant: "h6" }}
               sx={{ mt: "5px" }}
             />
-            {/* <CelebrityManagerList
+            <CelebrityManagerList
               managerInfo={celebrityManagerList}
               callbackManager={setCelebrityManagerList}
               disabled={disabled}
-            /> */}
+            />
             <Stack
               direction="row"
               spacing={2}
@@ -3691,7 +3716,7 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
             </Stack>
           </Card>
         </>
-      )}
+      )} */}
     </form>
   );
 };

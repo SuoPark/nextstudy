@@ -15,6 +15,7 @@ interface IProps {
 const CountryModalComp = ({ callbackData }: IProps) => {
   const dispatch = useDispatch();
 
+  //목록 항목 선택 이벤트
   const handleLinkCallback = (payload: { [key: string]: any }) => {
     callbackData && callbackData(payload);
     dispatch(dialogsActions.clear({}));
