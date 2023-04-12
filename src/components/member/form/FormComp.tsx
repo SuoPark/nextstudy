@@ -19,7 +19,9 @@ import { useDispatch } from "react-redux";
 import CountryModalComp from "../../client/seller/countryModal/CountryModalComp";
 import MSG from "@/assets/constants/messages";
 
-import BasicInfo from "../form/BasicInfo";
+import BasicInfo from "./BasicInfo/BasicInfo";
+import BasicCelebrityInfo from "./BasicInfo/BasicCelebrityInfo";
+import BasicSellerInfo from "./BasicInfo/BasicSellerInfo";
 
 interface IProps {
   children?: ReactNode;
@@ -163,8 +165,6 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     resolver: yupResolver(schema),
   });
 
-  const dispatch = useDispatch();
-
   const sellerPostCode = usePostCode(); //판매자주소
   const celebrityPostCode = usePostCode(); //셀럽주소
 
@@ -172,19 +172,6 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
   const [countryInfo, setCountryInfo] = useState<any>();
 
   const [celebrityCountryInfo, setCelebrityCountryInfo] = useState<any>();
-
-  //수수료
-  const [commissionApplyType, setCommissionApplyType] = useState<any>({
-    basicCommissionApplyType: detailData.sellerInfo?.basicCommissionApplyType,
-    liveCommissionApplyType: detailData.sellerInfo?.liveCommissionApplyType,
-    shortcutCommissionApplyType:
-      detailData.sellerInfo?.shortcutCommissionApplyType,
-  });
-
-  const [
-    celebrityBasicCommissionApplyType,
-    setCelebrityBasicCommissionApplyType,
-  ] = useState<string>(detailData.celebrityInfo?.basicCommissionApplyType);
 
   //회원등급
   const [memberGrade, setMemberGrade] = useState<IOptions[]>([]);
@@ -284,107 +271,6 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     }
   }, [detailData]);
 
-  //판매자 주소 버튼
-  const sellerSearchAddressButton = useGetMenuButtons({
-    initialButtons: [
-      {
-        buttonId: "seller-search-address-button",
-        fieldProps: {
-          ...BUTTON_CONFIG.BUTTON_DELETE,
-          ...BUTTON_CONFIG.BUTTON_FLOAT_RIGHT,
-        },
-      },
-    ],
-  });
-
-  //셀럽주소버튼
-  const celebritySearchAddressButton = useGetMenuButtons({
-    initialButtons: [
-      {
-        buttonId: "celebrity-search-address-button",
-        fieldProps: {
-          ...BUTTON_CONFIG.BUTTON_DELETE,
-          ...BUTTON_CONFIG.BUTTON_FLOAT_RIGHT,
-        },
-      },
-    ],
-  });
-
-  //판매자 국가 버튼
-  const sellerNationButtons = useGetMenuButtons({
-    initialButtons: [
-      {
-        buttonId: "seller-nation-button",
-        fieldProps: BUTTON_CONFIG.BUTTON_DELETE,
-      },
-    ],
-  });
-
-  const celebrityNationButtons = useGetMenuButtons({
-    initialButtons: [
-      {
-        buttonId: "celebrity-nation-button",
-        fieldProps: BUTTON_CONFIG.BUTTON_DELETE,
-      },
-    ],
-  });
-
-  //판매자 계정 확인 버튼
-  const sellerAccountVerificationButtons = useGetMenuButtons({
-    initialButtons: [
-      {
-        buttonId: "seller-account-verificationButton",
-        fieldProps: BUTTON_CONFIG.BUTTON_DELETE,
-      },
-    ],
-  });
-
-  const celebrityAccountVerificationButtons = useGetMenuButtons({
-    initialButtons: [
-      {
-        buttonId: "celebrity-account-verificationButton",
-        fieldProps: BUTTON_CONFIG.BUTTON_DELETE,
-      },
-    ],
-  });
-
-  //Seller 국가 Modal
-  const countryModalHandler = () => {
-    //dialog state 셋팅
-    dispatch(
-      dialogsActions.setDialog({
-        id: "countryNo",
-        comp: (
-          <DialogsComp
-            id="countryNo"
-            title="국가 검색"
-            initialProps={{ scroll: "paper" }}
-          >
-            <CountryModalComp callbackData={setCountryInfo} />
-          </DialogsComp>
-        ),
-      })
-    );
-  };
-
-  //celebrity 국가 Modal
-  const celebrityCountryModalHandler = () => {
-    dispatch(
-      dialogsActions.setDialog({
-        id: "countryNo",
-        comp: (
-          <DialogsComp
-            id="countryNo"
-            title="국가 검색"
-            initialProps={{ scroll: "paper" }}
-          >
-            <CountryModalComp callbackData={setCelebrityCountryInfo} />
-          </DialogsComp>
-        ),
-      })
-    );
-  };
-
   //회원등급 option
   const memberGradeOptionHandler = async () => {
     const { url, method } = API_MEMBER.MEMBERGRADE_TYPE_LIST;
@@ -430,25 +316,6 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
       setValue("celebrityInfo.countryName", data.data?.countryName)
     );
   };
-
-  //image
-  const [image] = useState<any>({
-    businessRegistrationImagePath:
-      detailData.sellerInfo?.businessRegistrationImagePath,
-    mailOrderRegisterImagePath:
-      detailData.sellerInfo?.mailOrderRegisterImagePath,
-    contractFilePath: detailData.sellerInfo?.contractFilePath,
-    accountImagePath: detailData.sellerInfo?.accountImagePath,
-  });
-
-  const [celebrityImage] = useState<any>({
-    businessRegistrationImagePath:
-      detailData.celebrityInfo?.businessRegistrationImagePath,
-    mailOrderRegisterImagePath:
-      detailData.celebrityInfo?.mailOrderRegisterImagePath,
-    contractFilePath: detailData.celebrityInfo?.contractFilePath,
-    accountImagePath: detailData.celebrityInfo?.accountImagePath,
-  });
 
   //최초 로드시 회원등급 종류 load
   useEffect(() => {
@@ -524,73 +391,6 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     setValue("celebrityManagerList", celebrityManagerList);
   }, [celebrityManagerList]);
 
-  //비활성화 해제시
-  useEffect(() => {
-    if (!disabled) {
-      //판매자
-      sellerNationButtons.setSettingButtons([
-        {
-          buttonId: "seller-nation-button",
-          fieldProps: {
-            ...BUTTON_CONFIG.BUTTON_DELETE,
-            ...BUTTON_CONFIG.BUTTON_TEXT_WHITE,
-          },
-        },
-      ]);
-      sellerSearchAddressButton.setSettingButtons([
-        {
-          buttonId: "seller-search-address-button",
-          fieldProps: {
-            ...BUTTON_CONFIG.BUTTON_DELETE,
-            style: {
-              color: "white",
-              float: "right",
-            },
-          },
-        },
-      ]);
-      sellerAccountVerificationButtons.setSettingButtons([
-        {
-          buttonId: "seller-account-verificationButton",
-          fieldProps: {
-            ...BUTTON_CONFIG.BUTTON_DELETE,
-            ...BUTTON_CONFIG.BUTTON_TEXT_WHITE,
-          },
-        },
-      ]);
-      //셀럽
-      celebritySearchAddressButton.setSettingButtons([
-        {
-          buttonId: "celebrity-search-address-button",
-          fieldProps: {
-            ...BUTTON_CONFIG.BUTTON_DELETE,
-            style: {
-              color: "white",
-              float: "right",
-            },
-          },
-        },
-      ]);
-      celebrityNationButtons.setSettingButtons([
-        {
-          buttonId: "celebrity-nation-button",
-          fieldProps: {
-            ...BUTTON_CONFIG.BUTTON_DELETE,
-            ...BUTTON_CONFIG.BUTTON_TEXT_WHITE,
-          },
-        },
-      ]);
-      celebrityAccountVerificationButtons.setSettingButtons([
-        {
-          buttonId: "celebrity-account-verificationButton",
-          fieldProps: {
-            ...BUTTON_CONFIG.BUTTON_DELETE,
-            ...BUTTON_CONFIG.BUTTON_TEXT_WHITE,
-          },
-        },
-      ]);
-    }
-  }, [disabled]);
   return (
     <form autoComplete="off" onSubmit={onSubmit && handleSubmit(onSubmit)}>
       <BasicInfo
@@ -603,6 +403,30 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
       >
         {children}
       </BasicInfo>
+      {detailData.memberType === "SELLER" && (
+        <BasicSellerInfo
+          control={control}
+          errors={errors}
+          detailData={detailData}
+          setValue={setValue}
+          disabled={disabled}
+          setCountryInfo={setCountryInfo}
+          sellerPostCode={sellerPostCode}
+        />
+      )}
+      {detailData.memberType === "CELEBRITY" && (
+        <BasicCelebrityInfo
+          control={control}
+          errors={errors}
+          detailData={detailData}
+          setValue={setValue}
+          disabled={disabled}
+          setCelebrityCountryInfo={setCelebrityCountryInfo}
+          celebrityPostCode={celebrityPostCode}
+        >
+          {children}
+        </BasicCelebrityInfo>
+      )}
     </form>
   );
 };

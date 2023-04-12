@@ -140,24 +140,6 @@ const BasicInfo = ({
       });
   };
 
-  //성별 핸들러
-  const genderHandler = (value: any) => {
-    setIsGender(value);
-    return value;
-  };
-
-  //국적 핸들러
-  const nationalityHandler = (value: any) => {
-    setIsNationality(value);
-    return value;
-  };
-
-  //닉네임 핸들러
-  const nickNameHandler = (value: any) => {
-    setIsNickName(value);
-    return value;
-  };
-
   //useEffect
   //에러 발생시
   useEffect(() => {
@@ -462,8 +444,11 @@ const BasicInfo = ({
                     rules={{ required: true }}
                     render={({ field: { value, onChange } }) => (
                       <TextField
-                        value={nickNameHandler(value) || ""}
-                        onChange={onChange}
+                        value={value || ""}
+                        onChange={(e) => {
+                          setIsNickName(e.target.value);
+                          return onChange(e.target.value);
+                        }}
                         size="small"
                         error={Boolean(errors.nickName)}
                         helperText={errors.nickName && errors.nickName.message}
@@ -592,7 +577,7 @@ const BasicInfo = ({
                     render={({ field: { value, onChange } }) => (
                       <RadioGroup
                         row
-                        value={value ? genderHandler(value) : ""}
+                        value={value ? value : ""}
                         onChange={(e) => {
                           setIsGender(e.target.value);
                           return onChange(e.target.value);
@@ -710,7 +695,7 @@ const BasicInfo = ({
                     render={({ field: { value, onChange } }) => (
                       <RadioGroup
                         row
-                        value={value ? nationalityHandler(value) : ""}
+                        value={value ? value : ""}
                         onChange={(e) => {
                           setIsNationality(e.target.value);
                           return onChange(e.target.value);
