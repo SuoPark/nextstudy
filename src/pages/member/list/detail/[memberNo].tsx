@@ -16,7 +16,7 @@ import API_MEMBER from "@/assets/api/member";
 
 import { IMemberDetailProps } from "@/types/memberTypes";
 import { fetchMemberDetail, useMemberDetail } from "@/hooks/queries/useMember";
-import FormComp from "@/components/member/FormComp";
+import FormComp from "@/components/member/form/FormComp";
 
 import withGetServerSideProps from "@/withServerSideProps";
 

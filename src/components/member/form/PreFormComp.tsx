@@ -25,7 +25,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useGetMenuButtons from "@/hooks/useGetMenuButtons";
 import { IOptions } from "@/types/common";
-import EssentialComp from "../common/EssentialComp";
+import EssentialComp from "../../common/EssentialComp";
 import usePostCode from "@/hooks/usePostCode";
 import seller from "@/assets/constants/seller";
 
@@ -35,14 +35,14 @@ import API_MEMBER from "@/assets/api/member";
 import API_COUNTRY from "@/assets/api/country";
 import fetcher from "@/utils/fetcher";
 import { dialogsActions } from "@/store/reducers/dialogsReducer";
-import DialogsComp from "../Dialog/DialogComp";
+import DialogsComp from "../../Dialog/DialogComp";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 import Grid from "@mui/material/Grid";
 import { WarningAmberOutlined } from "@mui/icons-material";
-import CountryModalComp from "../client/seller/countryModal/CountryModalComp";
+import CountryModalComp from "../../client/seller/countryModal/CountryModalComp";
 import MSG from "@/assets/constants/messages";
-import FileUploadComp from "../common/FileUploadComp";
+import FileUploadComp from "../../common/FileUploadComp";
 
 interface IProps {
   children?: ReactNode;
