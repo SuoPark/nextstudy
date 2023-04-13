@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Controller } from "react-hook-form";
 import {
   Autocomplete,
@@ -7,7 +7,6 @@ import {
   CardContent,
   CardHeader,
   FormLabel,
-  Stack,
   Table,
   TableBody,
   TableCell,
@@ -42,22 +41,16 @@ interface IProps {
     };
     address: Address | null;
   };
-  children: ReactNode;
+  celebrityImage: any;
 }
 const BasicCelebrityInfo = ({
   control,
   errors,
-  detailData,
-  setValue,
   disabled,
   setCelebrityCountryInfo,
   celebrityPostCode,
-  children,
+  celebrityImage,
 }: IProps) => {
-  const [
-    celebrityBasicCommissionApplyType,
-    setCelebrityBasicCommissionApplyType,
-  ] = useState<string>(detailData.celebrityInfo?.basicCommissionApplyType);
   const dispatch = useDispatch();
   //셀럽주소버튼
   const celebritySearchAddressButton = useGetMenuButtons({
@@ -79,23 +72,7 @@ const BasicCelebrityInfo = ({
       },
     ],
   });
-  const celebrityAccountVerificationButtons = useGetMenuButtons({
-    initialButtons: [
-      {
-        buttonId: "celebrity-account-verificationButton",
-        fieldProps: BUTTON_CONFIG.BUTTON_DELETE,
-      },
-    ],
-  });
 
-  const [celebrityImage] = useState<any>({
-    businessRegistrationImagePath:
-      detailData.celebrityInfo?.businessRegistrationImagePath,
-    mailOrderRegisterImagePath:
-      detailData.celebrityInfo?.mailOrderRegisterImagePath,
-    contractFilePath: detailData.celebrityInfo?.contractFilePath,
-    accountImagePath: detailData.celebrityInfo?.accountImagePath,
-  });
   //celebrity 국가 Modal
   const celebrityCountryModalHandler = () => {
     dispatch(
@@ -113,9 +90,7 @@ const BasicCelebrityInfo = ({
       })
     );
   };
-  const celebrityAccountVerifyHandler = () => {
-    setValue("celebrityInfo.accountVerifyYn", "Y");
-  };
+
   //비활성화 해제시
   useEffect(() => {
     if (!disabled) {
@@ -135,15 +110,6 @@ const BasicCelebrityInfo = ({
       celebrityNationButtons.setSettingButtons([
         {
           buttonId: "celebrity-nation-button",
-          fieldProps: {
-            ...BUTTON_CONFIG.BUTTON_DELETE,
-            ...BUTTON_CONFIG.BUTTON_TEXT_WHITE,
-          },
-        },
-      ]);
-      celebrityAccountVerificationButtons.setSettingButtons([
-        {
-          buttonId: "celebrity-account-verificationButton",
           fieldProps: {
             ...BUTTON_CONFIG.BUTTON_DELETE,
             ...BUTTON_CONFIG.BUTTON_TEXT_WHITE,
@@ -675,482 +641,6 @@ const BasicCelebrityInfo = ({
             </Table>
           </TableContainer>
         </CardContent>
-      </Card>
-      <Card sx={{ mt: "10px" }}>
-        <CardHeader
-          title="계약 정보"
-          titleTypographyProps={{ variant: "h6" }}
-        />
-        <CardContent>
-          <TableContainer>
-            <Table>
-              <colgroup>
-                <col style={{ width: "10%" }} />
-                <col style={{ width: "20%" }} />
-                <col style={{ width: "10%" }} />
-                <col style={{ width: "10%" }} />
-                <col style={{ width: "20%" }} />
-                <col style={{ width: "20%" }} />
-                <col style={{ width: "10%" }} />
-                <col />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableCell component={"th"}>
-                    <FormLabel>기본수수료</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityInfo.basicCommissionApplyType"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <Autocomplete
-                          options={seller.CommissionTypeCode}
-                          getOptionLabel={(option) => option.label}
-                          onChange={(_, newValue: any) => {
-                            setCelebrityBasicCommissionApplyType(
-                              newValue?.value
-                            );
-                            return onChange(newValue?.value);
-                          }}
-                          value={
-                            seller.CommissionTypeCode.find(
-                              (opt) => opt.value === value
-                            ) || seller.CommissionTypeCode[0]
-                          }
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              name="celebrityInfo.basicCommissionApplyType"
-                            />
-                          )}
-                          size="small"
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  {celebrityBasicCommissionApplyType === "RATE" && (
-                    <TableCell colSpan={1}>
-                      <Controller
-                        name="celebrityInfo.basicCommissionValue"
-                        control={control}
-                        render={({ field: { value, onChange } }) => (
-                          <TextField
-                            value={value + "%" || ""}
-                            onChange={onChange}
-                            size="small"
-                            error={Boolean(errors.celebrityInfo)}
-                            helperText={
-                              errors.celebrityInfo &&
-                              errors.celebrityInfo.message
-                            }
-                            fullWidth
-                            disabled={disabled}
-                          />
-                        )}
-                      />
-                    </TableCell>
-                  )}
-                  {celebrityBasicCommissionApplyType === "AMOUNT" && (
-                    <TableCell colSpan={1}>
-                      <Controller
-                        name="celebrityInfo.basicCommissionValue"
-                        control={control}
-                        render={({ field: { value, onChange } }) => (
-                          <TextField
-                            value={value + "원" || ""}
-                            onChange={onChange}
-                            size="small"
-                            error={Boolean(errors.basicCommissionValue)}
-                            helperText={
-                              errors.basicCommissionValue &&
-                              errors.basicCommissionValue.message
-                            }
-                            fullWidth
-                            disabled={disabled}
-                          />
-                        )}
-                      />
-                    </TableCell>
-                  )}
-                  <TableCell colSpan={1}>
-                    <FormLabel>계약서</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={3}>
-                    <Controller
-                      name="celebrityInfo.contractFilePath"
-                      control={control}
-                      render={({ field: { onChange } }) => {
-                        return (
-                          <FileUploadComp
-                            buttonStyle={{
-                              width: "140px",
-                              marginTop: "25px",
-                            }}
-                            uploadIcon
-                            attachedFiles={celebrityImage.contractFilePath}
-                            thumbNail={true}
-                            handleChange={onChange}
-                            disabled={disabled}
-                          >
-                            이미지 업로드
-                          </FileUploadComp>
-                        );
-                      }}
-                    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component={"th"}>
-                    <FormLabel>정산계좌정보</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityInfo.accountBankCode"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityInfo)}
-                          helperText={
-                            errors.celebrityInfo && errors.celebrityInfo.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell colSpan={2}>
-                    <Controller
-                      name="celebrityInfo.accountNo"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityInfo)}
-                          helperText={
-                            errors.celebrityInfo && errors.celebrityInfo.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityInfo.accountName"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityInfo)}
-                          helperText={
-                            errors.celebrityInfo && errors.celebrityInfo.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell colSpan={1} sx={{ textAlign: "center" }}>
-                    <Controller
-                      name="celebrityInfo.accountImagePath"
-                      control={control}
-                      render={({ field: { onChange } }) => {
-                        return (
-                          <FileUploadComp
-                            buttonStyle={{
-                              width: "140px",
-                              marginTop: "25px",
-                            }}
-                            uploadIcon
-                            attachedFiles={celebrityImage.accountImagePath}
-                            thumbNail={true}
-                            handleChange={onChange}
-                            disabled={disabled}
-                          >
-                            이미지 업로드
-                          </FileUploadComp>
-                        );
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    {celebrityAccountVerificationButtons.buttons.map(
-                      ({ buttonId, buttonDesc, fieldProps }) => (
-                        <Button
-                          key={buttonId}
-                          {...fieldProps}
-                          disabled={disabled}
-                          onClick={celebrityAccountVerifyHandler}
-                        >
-                          {buttonDesc}
-                        </Button>
-                      )
-                    )}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: "10px" }}>
-        <CardHeader
-          title="기타 증빙서류 정보"
-          titleTypographyProps={{ variant: "h6" }}
-          sx={{ mt: "5px" }}
-        />
-        {/* <CelebrityEtcDocumentList
-          etc={celebrityEtcDocumentList}
-          callbackEtc={setCelebrityEtcDocumentList}
-          disabled={disabled}
-        /> */}
-      </Card>
-      <Card sx={{ mt: "10px" }}>
-        <CardHeader
-          title="대표자 정보"
-          titleTypographyProps={{ variant: "h6" }}
-          sx={{ mt: "5px" }}
-        />
-        <CardContent>
-          <TableContainer>
-            <Table>
-              <colgroup>
-                <col style={{ width: "15%" }} />
-                <col style={{ width: "35%" }} />
-                <col style={{ width: "15%" }} />
-                <col style={{ width: "35%" }} />
-                <col />
-              </colgroup>
-              <TableBody>
-                <TableRow>
-                  <TableCell component={"th"}>
-                    <FormLabel>이름</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerName"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell component={"th"}>
-                    <FormLabel>직위/직책</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerPositionName"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component={"th"}>
-                    <FormLabel>부서명</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerDepartmentName"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell component={"th"}>
-                    <FormLabel>팩스번호</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerFaxNo"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component={"th"}>
-                    <FormLabel>이메일</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerEmail"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell component={"th"}>
-                    <FormLabel>전화번호</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerTelephoneNo"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component={"th"}>
-                    <FormLabel>휴대폰번호</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerMobilePhoneNo"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                  <TableCell component={"th"}>
-                    <FormLabel>담당자역할</FormLabel>
-                  </TableCell>
-                  <TableCell colSpan={1}>
-                    <Controller
-                      name="celebrityMainManager.managerRole"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <TextField
-                          value={value || ""}
-                          onChange={onChange}
-                          size="small"
-                          error={Boolean(errors.celebrityMainManager)}
-                          helperText={
-                            errors.celebrityMainManager &&
-                            errors.celebrityMainManager.message
-                          }
-                          fullWidth
-                          disabled={disabled}
-                        />
-                      )}
-                    />
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </CardContent>
-      </Card>
-      <Card sx={{ mt: "10px" }}>
-        <CardHeader
-          title="담당자 정보"
-          titleTypographyProps={{ variant: "h6" }}
-          sx={{ mt: "5px" }}
-        />
-        {/* <CelebrityManagerList
-          managerInfo={celebrityManagerList}
-          callbackManager={setCelebrityManagerList}
-          disabled={disabled}
-        /> */}
-        <Stack
-          direction="row"
-          spacing={2}
-          pr={5}
-          pb={5}
-          justifyContent={"right"}
-        >
-          {children}
-        </Stack>
       </Card>
     </>
   );

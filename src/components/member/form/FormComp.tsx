@@ -1,73 +1,26 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useGetMenuButtons from "@/hooks/useGetMenuButtons";
 import { IOptions } from "@/types/common";
-
 import usePostCode from "@/hooks/usePostCode";
-
-import BUTTON_CONFIG from "@/assets/api/button";
 import API_MEMBER from "@/assets/api/member";
 import API_COUNTRY from "@/assets/api/country";
 import fetcher from "@/utils/fetcher";
-import { dialogsActions } from "@/store/reducers/dialogsReducer";
-import DialogsComp from "../../Dialog/DialogComp";
-import { useDispatch } from "react-redux";
-
-import CountryModalComp from "../../client/seller/countryModal/CountryModalComp";
 import MSG from "@/assets/constants/messages";
-
-import BasicInfo from "./BasicInfo/BasicInfo";
-import BasicCelebrityInfo from "./BasicInfo/BasicCelebrityInfo";
-import BasicSellerInfo from "./BasicInfo/BasicSellerInfo";
+import BasicInfo from "./BasicInfo";
+import BasicCelebrityInfo from "./celebrity/BasicCelebrityInfo";
+import BasicSellerInfo from "./seller/BasicSellerInfo";
+import SellerContractInfo from "./seller/SellerContractInfo";
+import CelebrityContractInfo from "./celebrity/CelebrityContractInfo";
+import SellerEtcDocument from "./seller/SellerEtcDocument";
+import CelebrityEtcDocument from "./celebrity/CelebrityEtcDocument";
 
 interface IProps {
   children?: ReactNode;
   disabled?: boolean;
   detailData?: any | null;
   onSubmit?: (payload: any) => void;
-}
-
-interface ISellerInfo {
-  sellerNo: number;
-  sellerName: string;
-  countryNo: number;
-  companyName: string;
-  corporationType: string;
-  taxType: string;
-  businessRegistrationNo: string;
-  businessRegistrationImagePath: string;
-  mailOrderRegisterNo: string;
-  mailOrderRegisterImagePath: string;
-  representativeName: string;
-  businessKind: string;
-  telephoneNo: string;
-  faxNo: string;
-  businessCondition: string;
-  email: string;
-  zipcode: string;
-  address: string;
-  addressDetail: string;
-  basicCommissionApplyType: string;
-  basicCommissionValue: number;
-  contractFileName: string;
-  contractFilePath: string;
-  accountBankCode: string;
-  accountNo: string;
-  accountName: string;
-  accountImagePath: string;
-  accountVerifyYn: string;
-  authenticationSellerYn: string;
-  useYn: string;
-}
-
-interface IEtcDocumentInfo {
-  sellerEtcDocumentNo: number;
-  documentName: string;
-  filePath: string;
-  realFileName: string;
 }
 
 interface IManagerInfo {
@@ -81,45 +34,6 @@ interface IManagerInfo {
   managerMobilePhoneNo: string;
   managerRole: string;
   mainManagerYn: string;
-}
-
-interface ICelebrityInfo {
-  celebrityNo: number;
-  celebrityName: string;
-  countryNo: number;
-  realName: string;
-  corporationType: string;
-  taxType: string;
-  businessRegistrationNo: string;
-  businessRegistrationImagePath: string;
-  mailOrderRegisterNo: string;
-  mailOrderRegisterImagePath: string;
-  representativeName: string;
-  businessKind: string;
-  telephoneNo: string;
-  businessCondition: string;
-  email: string;
-  zipcode: string;
-  address: string;
-  addressDetail: string;
-  basicCommissionApplyType: string;
-  basicCommissionValue: number;
-  contractFileName: string;
-  contractFilePath: string;
-  accountBankCode: string;
-  accountNo: string;
-  accountName: string;
-  accountImagePath: string;
-  accountVerifyYn: string;
-  authenticationSellerYn: string;
-  useYn: string;
-}
-
-interface ICelebrityEtcDocumentInfo {
-  celebrityEtcDocumentNo: number;
-  documentName: string;
-  filePath: string;
-  realFileName: string;
 }
 
 interface ICelebrityManagerInfo {
@@ -290,6 +204,24 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     });
   };
 
+  //image
+  const [image] = useState<any>({
+    businessRegistrationImagePath:
+      detailData.sellerInfo?.businessRegistrationImagePath,
+    mailOrderRegisterImagePath:
+      detailData.sellerInfo?.mailOrderRegisterImagePath,
+    contractFilePath: detailData.sellerInfo?.contractFilePath,
+    accountImagePath: detailData.sellerInfo?.accountImagePath,
+  });
+  const [celebrityImage] = useState<any>({
+    businessRegistrationImagePath:
+      detailData.celebrityInfo?.businessRegistrationImagePath,
+    mailOrderRegisterImagePath:
+      detailData.celebrityInfo?.mailOrderRegisterImagePath,
+    contractFilePath: detailData.celebrityInfo?.contractFilePath,
+    accountImagePath: detailData.celebrityInfo?.accountImagePath,
+  });
+
   //seller 국가 선택
   const countrySelectHandler = async () => {
     const { url, method } = API_COUNTRY.COUNTRY_GET;
@@ -359,23 +291,6 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
     }
   }, [celebrityPostCode.openProps]);
 
-  //기타 증빙서류
-  const [etcDocumentList, setEtcDocumentList] = useState<IEtcDocumentInfo[]>(
-    detailData.etcDocumentList
-  );
-  const [celebrityEtcDocumentList, setCelebrityEtcDocumentList] = useState<
-    ICelebrityEtcDocumentInfo[]
-  >(detailData.celebrityEtcDocumentList);
-
-  //증빙서류 form 업데이트
-  useEffect(() => {
-    setValue("etcDocumentList", etcDocumentList);
-  }, [etcDocumentList]);
-
-  useEffect(() => {
-    setValue("celebrityEtcDocumentList", celebrityEtcDocumentList);
-  }, [celebrityEtcDocumentList]);
-
   const [managerList, setManagerList] = useState<IManagerInfo[]>(
     detailData.managerList
   );
@@ -404,28 +319,58 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
         {children}
       </BasicInfo>
       {detailData.memberType === "SELLER" && (
-        <BasicSellerInfo
-          control={control}
-          errors={errors}
-          detailData={detailData}
-          setValue={setValue}
-          disabled={disabled}
-          setCountryInfo={setCountryInfo}
-          sellerPostCode={sellerPostCode}
-        />
+        <>
+          <BasicSellerInfo
+            control={control}
+            errors={errors}
+            detailData={detailData}
+            setValue={setValue}
+            disabled={disabled}
+            setCountryInfo={setCountryInfo}
+            sellerPostCode={sellerPostCode}
+            image={image}
+          />
+          <SellerContractInfo
+            control={control}
+            errors={errors}
+            detailData={detailData}
+            setValue={setValue}
+            disabled={disabled}
+            image={image}
+          />
+          <SellerEtcDocument
+            initDoc={detailData.etcDocumentList}
+            setValue={setValue}
+            disabled={disabled}
+          />
+        </>
       )}
       {detailData.memberType === "CELEBRITY" && (
-        <BasicCelebrityInfo
-          control={control}
-          errors={errors}
-          detailData={detailData}
-          setValue={setValue}
-          disabled={disabled}
-          setCelebrityCountryInfo={setCelebrityCountryInfo}
-          celebrityPostCode={celebrityPostCode}
-        >
-          {children}
-        </BasicCelebrityInfo>
+        <>
+          <BasicCelebrityInfo
+            control={control}
+            errors={errors}
+            detailData={detailData}
+            setValue={setValue}
+            disabled={disabled}
+            setCelebrityCountryInfo={setCelebrityCountryInfo}
+            celebrityPostCode={celebrityPostCode}
+            celebrityImage={celebrityImage}
+          />
+          <CelebrityContractInfo
+            control={control}
+            errors={errors}
+            detailData={detailData}
+            setValue={setValue}
+            disabled={disabled}
+            celebrityImage={celebrityImage}
+          />
+          <CelebrityEtcDocument
+            initDoc={detailData.celebrityEtcDocumentList}
+            setValue={setValue}
+            disabled={disabled}
+          />
+        </>
       )}
     </form>
   );
