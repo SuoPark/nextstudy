@@ -1,13 +1,12 @@
 import Layout from "@/components/layout/Layout";
 import { theme } from "@/configs/theme";
 import { AuthProvider } from "@/context/AuthContext";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import type { AppContext, AppInitialProps, AppProps } from "next/app";
 
-import { ThemeProvider } from "styled-components";
 import React, { Fragment, useState } from "react";
 import wrapper, { RootState } from "./../store/configureStore";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { SettingsProvider } from "@/context/SettingContext";
 
 import { Provider, useSelector } from "react-redux";
@@ -26,18 +25,20 @@ const App = ({ Component, pageProps }: ExtendedAppProps) => {
   return (
     <>
       <QueryClientProvider client={client}>
-        <AuthProvider>
-          <SettingsProvider>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              {getLayout(<Component {...pageProps} />)}
-              {dialogs.map(({ comp }, i) => (
-                <Fragment key={i}>{comp}</Fragment>
-              ))}
-              <Toaster />
-            </ThemeProvider>
-          </SettingsProvider>
-        </AuthProvider>
+        <Hydrate state={pageProps.dehydratedState}>
+          <AuthProvider>
+            <SettingsProvider>
+              <ThemeProvider theme={theme}>
+                <CssBaseline />
+                {getLayout(<Component {...pageProps} />)}
+                {dialogs.map(({ comp }, i) => (
+                  <Fragment key={i}>{comp}</Fragment>
+                ))}
+                <Toaster />
+              </ThemeProvider>
+            </SettingsProvider>
+          </AuthProvider>
+        </Hydrate>
       </QueryClientProvider>
     </>
   );

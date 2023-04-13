@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import {
   Autocomplete,
+  Box,
   Button,
   Card,
   CardContent,
@@ -804,8 +805,8 @@ const BasicInfo = ({
                   모든약관에 동의합니다.
                 </TableCell>
                 <TableCell colSpan={12}>
-                  <TableRow>
-                    <TableCell sx={{ width: "10%" }}>
+                  <Stack direction="column">
+                    <Box>
                       <Checkbox
                         name={"personalInfoUseAgreementYn"}
                         checked={detailData.personalInfoUseAgreementYn === "Y"}
@@ -813,10 +814,8 @@ const BasicInfo = ({
                         onChange={(e, val) => {}}
                       />
                       개인정보사용동의여부에 동의합니다.
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={1}>
+                    </Box>
+                    <Box>
                       <Checkbox
                         name={"authenticationYn"}
                         checked={detailData.authenticationYn === "Y"}
@@ -824,8 +823,8 @@ const BasicInfo = ({
                         onChange={(e, val) => {}}
                       />
                       본인인증여부에 동의합니다.
-                    </TableCell>
-                  </TableRow>
+                    </Box>
+                  </Stack>
                 </TableCell>
               </TableRow>
               <TableRow>
