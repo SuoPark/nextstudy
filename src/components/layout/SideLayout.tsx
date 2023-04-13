@@ -15,8 +15,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 import { IMenuItem } from "@/hooks/useAdminInfo";
-import Router, { useRouter } from "next/router";
-import { useQuery } from "react-query";
+import Router from "next/router";
 
 const SideLayout = () => {
   const StyledListItem = styled(ListItemButton)({
@@ -47,31 +46,29 @@ const SideLayout = () => {
     paddingLeft: "1.375rem",
     paddingRight: "0.875rem",
   });
-  const router = useRouter();
-  const { asPath } = router;
+
   const settings = useContext(SettingsContext);
   const saveSettings = settings.saveSettings;
   const settingsValue = settings.settings;
-  const auth = useAuth();
-  const items = auth.user?.adminMenuList.children || [];
   const updateSettings = (data: IMenuItem) => {
     if (data.children) {
       const item: Settings = {
         ...settingsValue,
         upperIndex: data.adminMenuNo,
       };
-      console.log(1);
       saveSettings(item);
     } else {
-      console.log(2);
       const item: Settings = {
         ...settingsValue,
         upperIndex: data.upperMenuNo,
+        itemIndex: data.adminMenuNo,
       };
       saveSettings(item);
       Router.push(data.menuUrl);
     }
   };
+  const auth = useAuth();
+  const items = auth.user?.adminMenuList.children || [];
 
   return (
     <Box sx={{ width: "100%", maxWidth: 360 }}>
@@ -80,11 +77,11 @@ const SideLayout = () => {
           return (
             <Box key={i}>
               <StyledListItem
-                selected={asPath === data.menuUrl}
+                selected={settingsValue.itemIndex === data.adminMenuNo}
                 onClick={() => updateSettings(data)}
                 sx={{
                   backgroundImage:
-                    asPath === data.menuUrl
+                    settingsValue.itemIndex === data.adminMenuNo
                       ? `linear-gradient(
                   98deg,
                   rgb(255, 140, 144),
@@ -92,7 +89,7 @@ const SideLayout = () => {
                 )`
                       : "",
                   boxShadow:
-                    asPath === data.menuUrl
+                    settingsValue.itemIndex === data.adminMenuNo
                       ? "rgba(58, 53, 65, 0.42) 0px 4px 8px -4px"
                       : "",
                 }}
@@ -114,11 +111,13 @@ const SideLayout = () => {
                   return (
                     <StyledListItem
                       key={i}
-                      selected={asPath === children.menuUrl}
+                      selected={
+                        settingsValue.itemIndex === children.adminMenuNo
+                      }
                       onClick={() => updateSettings(children)}
                       sx={{
                         backgroundImage:
-                          asPath === children.menuUrl
+                          settingsValue.itemIndex === children.adminMenuNo
                             ? `linear-gradient(
               98deg,
               rgb(255, 140, 144),
@@ -126,7 +125,7 @@ const SideLayout = () => {
             )`
                             : "",
                         boxShadow:
-                          asPath === children.menuUrl
+                          settingsValue.itemIndex === children.adminMenuNo
                             ? "rgba(58, 53, 65, 0.42) 0px 4px 8px -4px"
                             : "",
                       }}

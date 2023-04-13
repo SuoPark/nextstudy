@@ -7,6 +7,7 @@ interface SettingProps {
 
 export interface Settings {
   skin: string;
+  itemIndex: number;
   upperIndex: number;
 }
 export type SettingsContextValue = {
@@ -19,6 +20,7 @@ const initSettings: Settings = {
     themeConfig.layout === "horizontal" && themeConfig.skin === "semi-dark"
       ? "default"
       : themeConfig.skin,
+  itemIndex: 2,
   upperIndex: 1,
 };
 export const SettingsContext = createContext<SettingsContextValue>({
