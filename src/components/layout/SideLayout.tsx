@@ -14,6 +14,9 @@ import Link from "next/link";
 
 import { useAuth } from "@/hooks/useAuth";
 import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
+import { IMenuItem } from "@/hooks/useAdminInfo";
+import Router, { useRouter } from "next/router";
+import { useQuery } from "react-query";
 
 const SideLayout = () => {
   const StyledListItem = styled(ListItemButton)({
@@ -44,28 +47,44 @@ const SideLayout = () => {
     paddingLeft: "1.375rem",
     paddingRight: "0.875rem",
   });
-
+  const router = useRouter();
+  const { asPath } = router;
   const settings = useContext(SettingsContext);
   const saveSettings = settings.saveSettings;
-
-  const updateSettings = (index: number) => {
-    const item: Settings = { itemIndex: index };
-    saveSettings(item);
-  };
+  const settingsValue = settings.settings;
   const auth = useAuth();
   const items = auth.user?.adminMenuList.children || [];
+  const updateSettings = (data: IMenuItem) => {
+    if (data.children) {
+      const item: Settings = {
+        ...settingsValue,
+        upperIndex: data.adminMenuNo,
+      };
+      console.log(1);
+      saveSettings(item);
+    } else {
+      console.log(2);
+      const item: Settings = {
+        ...settingsValue,
+        upperIndex: data.upperMenuNo,
+      };
+      saveSettings(item);
+      Router.push(data.menuUrl);
+    }
+  };
+
   return (
     <Box sx={{ width: "100%", maxWidth: 360 }}>
       <List component="nav" aria-label="secondary mailbox folder">
         {items.map((data, i) => {
           return (
-            <Link key={i} href={data.menuUrl || ""}>
+            <Box key={i}>
               <StyledListItem
-                selected={settings.settings.itemIndex === data.adminMenuNo}
-                onClick={() => updateSettings(data.adminMenuNo)}
+                selected={asPath === data.menuUrl}
+                onClick={() => updateSettings(data)}
                 sx={{
                   backgroundImage:
-                    settings.settings.itemIndex === data.adminMenuNo
+                    asPath === data.menuUrl
                       ? `linear-gradient(
                   98deg,
                   rgb(255, 140, 144),
@@ -73,54 +92,51 @@ const SideLayout = () => {
                 )`
                       : "",
                   boxShadow:
-                    settings.settings.itemIndex === data.adminMenuNo
+                    asPath === data.menuUrl
                       ? "rgba(58, 53, 65, 0.42) 0px 4px 8px -4px"
                       : "",
                 }}
               >
                 <ListItemText primary={data.menuName} />
                 {data.children &&
-                settings.settings.itemIndex === data.adminMenuNo ? (
+                settingsValue.upperIndex === data.adminMenuNo ? (
                   <ExpandLess />
                 ) : (
                   <ExpandMore />
                 )}
               </StyledListItem>
               <Collapse
-                in={settings.settings.itemIndex === data.adminMenuNo}
+                in={settingsValue.upperIndex === data.adminMenuNo}
                 timeout="auto"
                 unmountOnExit
               >
                 {data.children?.map((children, i) => {
                   return (
-                    <Link key={i} href={children.menuUrl || ""}>
-                      <StyledListItem
-                        selected={
-                          settings.settings.itemIndex === children.adminMenuNo
-                        }
-                        onClick={() => updateSettings(i)}
-                        sx={{
-                          backgroundImage:
-                            settings.settings.itemIndex === children.adminMenuNo
-                              ? `linear-gradient(
-                  98deg,
-                  rgb(255, 140, 144),
-                  rgb(255, 76, 81) 94%
-                )`
-                              : "",
-                          boxShadow:
-                            settings.settings.itemIndex === children.adminMenuNo
-                              ? "rgba(58, 53, 65, 0.42) 0px 4px 8px -4px"
-                              : "",
-                        }}
-                      >
-                        <ListItemText primary={children.menuName} />
-                      </StyledListItem>
-                    </Link>
+                    <StyledListItem
+                      key={i}
+                      selected={asPath === children.menuUrl}
+                      onClick={() => updateSettings(children)}
+                      sx={{
+                        backgroundImage:
+                          asPath === children.menuUrl
+                            ? `linear-gradient(
+              98deg,
+              rgb(255, 140, 144),
+              rgb(255, 76, 81) 94%
+            )`
+                            : "",
+                        boxShadow:
+                          asPath === children.menuUrl
+                            ? "rgba(58, 53, 65, 0.42) 0px 4px 8px -4px"
+                            : "",
+                      }}
+                    >
+                      <ListItemText primary={children.menuName} />
+                    </StyledListItem>
                   );
                 })}
               </Collapse>
-            </Link>
+            </Box>
           );
         })}
       </List>
