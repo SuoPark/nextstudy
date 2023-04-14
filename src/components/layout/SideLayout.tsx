@@ -99,7 +99,13 @@ const SideLayout = () => {
                 settingsValue.upperIndex === data.adminMenuNo ? (
                   <ExpandLess />
                 ) : (
+                  <></>
+                )}
+                {data.children &&
+                settingsValue.upperIndex != data.adminMenuNo ? (
                   <ExpandMore />
+                ) : (
+                  <></>
                 )}
               </StyledListItem>
               <Collapse
