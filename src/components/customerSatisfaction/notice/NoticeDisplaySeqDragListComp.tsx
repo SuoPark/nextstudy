@@ -6,7 +6,7 @@ import API_BOARD from "@/assets/api/board";
 import toast from "react-hot-toast";
 
 import BUTTON_CONFIG from "@/assets/api/button";
-import DefaultListComp from "../list/DefaultListComp";
+import DefaultListComp from "@/components/list/DefaultListComp";
 
 interface IProps {
   setDisplaySeqState: (payload: boolean) => void;

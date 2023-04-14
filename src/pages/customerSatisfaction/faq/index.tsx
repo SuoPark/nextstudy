@@ -1,28 +1,25 @@
-import API_BOARD from "@/assets/api/board";
-import { SearchListProvider } from "@/context/SearchListContext";
-import { Card, CardContent, Grid } from "@mui/material";
-import { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import customerSatisfactionOptions from "@/assets/constants/customerSatisfaction";
 import commonOptions from "@/assets/constants/common";
-import NoticeDisplaySeqDragListComp from "@/components/customerSatisfaction/notice/NoticeDisplaySeqDragListComp";
-import NoticePagingListComp from "@/components/customerSatisfaction/notice/NoticePagingListComp";
+import { SearchListProvider } from "@/context/SearchListContext";
+import API_BOARD from "@/assets/api/board";
+import { Card, CardContent, Grid } from "@mui/material";
 import RefSearchFomComp from "@/components/search/RefSearchFomComp";
+import FaqDisplaySeqDragListComp from "@/components/customerSatisfaction/faq/FaqDisplaySeqDragListComp";
+import FaqPagingListComp from "@/components/customerSatisfaction/faq/FaqPagingListComp";
 
-const Notice = () => {
-  //표시여부
+const FaqPage = () => {
   const [displaySeqState, setDisplaySeqState] = useState<boolean>(false);
 
-  //검색창 제어
   const resetRef = useRef<any>(null);
 
-  //테이블 column
   const [nodeItems] = useState([
     {
       nodeType: "AUTO_COMPLETE",
-      id: "noticeType",
+      id: "faqType",
       label: "유형",
       xs: 3,
-      nodeOptions: { options: customerSatisfactionOptions.noticeType },
+      nodeOptions: { options: customerSatisfactionOptions.faqType },
     },
     {
       nodeType: "RADIO",
@@ -34,22 +31,15 @@ const Notice = () => {
       },
     },
     {
-      nodeType: "AUTO_COMPLETE",
-      id: "topFixYn",
-      label: "최상단 고정 여부",
-      xs: 3,
-      nodeOptions: { options: customerSatisfactionOptions.topFixYn },
-    },
-    {
       nodeType: "DATE_RANGE_PICKER",
       id: "createDate",
-      label: "등록일",
-      xs: 4,
+      label: "등록일자",
+      xs: 6,
       nodeOptions: { ids: ["createDateFrom", "createDateTo"] },
     },
     {
       nodeType: "TEXT_FIELD",
-      id: "noticeTitle",
+      id: "faqTitle",
       label: "제목",
       xs: 6,
     },
@@ -60,8 +50,9 @@ const Notice = () => {
       xs: 6,
     },
   ]);
+
   return (
-    <SearchListProvider api={API_BOARD.NOTICE_LIST} isEnabled={true}>
+    <SearchListProvider api={API_BOARD.FAQ_LIST} isEnabled={true}>
       <Grid container rowSpacing={6}>
         {displaySeqState === false && (
           <Grid item xs={12}>
@@ -79,12 +70,12 @@ const Notice = () => {
         <Grid item xs={12}>
           <Card>
             {displaySeqState === false ? (
-              <NoticePagingListComp
+              <FaqPagingListComp
                 setDisplaySeqState={setDisplaySeqState}
                 resetRef={resetRef}
               />
             ) : (
-              <NoticeDisplaySeqDragListComp
+              <FaqDisplaySeqDragListComp
                 setDisplaySeqState={setDisplaySeqState}
               />
             )}
@@ -95,4 +86,4 @@ const Notice = () => {
   );
 };
 
-export default Notice;
+export default FaqPage;

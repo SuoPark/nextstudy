@@ -285,7 +285,6 @@ const FormComp = ({ children, disabled, detailData, onSubmit }: IProps) => {
 
   useEffect(() => {
     if (celebrityPostCode.address) {
-      console.log("3");
       setValue("celebrityInfo.address", celebrityPostCode.address?.roadAddress);
       setValue("celebrityInfo.zipcode", celebrityPostCode.address?.zonecode);
     }

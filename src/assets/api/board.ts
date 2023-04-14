@@ -2,7 +2,7 @@ import { IApi } from "@/types/common";
 
 const API: { [key: string]: IApi } = {
   ANSWER_TEMPLATE_LIST: {
-    url: "/api/adm/board/answerTemplate/listAllPage",
+    url: "/api/adm/board/answerTemplate/list",
     method: "get",
   },
   ANSWER_TEMPLATE_GET: {
@@ -26,7 +26,7 @@ const API: { [key: string]: IApi } = {
     method: "delete",
   },
   ONE_TO_ONE_QUESTION_LIST: {
-    url: "/api/adm/board/oneToOneQuestion/listAllPage",
+    url: "/api/adm/board/oneToOneQuestion/list",
     method: "get",
   },
   ONE_TO_ONE_QUESTION_GET: {
@@ -70,7 +70,7 @@ const API: { [key: string]: IApi } = {
     method: "delete",
   },
   FAQ_LIST: {
-    url: "/api/adm/board/faq/listAllPage",
+    url: "/api/adm/board/faq/list",
     method: "get",
   },
   FAQ_GET: {
@@ -94,11 +94,11 @@ const API: { [key: string]: IApi } = {
     method: "delete",
   },
   MANAGER_LIST: {
-    url: "/api/adm/board/questionTypeManager/listAllPage",
+    url: "/api/adm/board/questionTypeManager/list",
     method: "get",
   },
   PRODUCT_REVIEW_LIST: {
-    url: "/api/adm/board/productReview/listAllPage",
+    url: "/api/adm/board/productReview/list",
     method: "get",
   },
   PRODUCT_REVIEW_GET: {
@@ -126,7 +126,7 @@ const API: { [key: string]: IApi } = {
     method: `get`,
   },
   PRODUCT_QUESTION_LIST: {
-    url: "/api/adm/board/productQuestion/listAllPage",
+    url: "/api/adm/board/productQuestion/list",
     method: "get",
   },
   PRODUCT_QUESTION_OPEN_TYPE_UPDATE: {
